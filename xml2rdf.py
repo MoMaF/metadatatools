@@ -36,7 +36,8 @@ def clean(s):
     if s is None:
         return None
     s = ' '.join(s.split('\n'))
-    s = ' '.join(s.split('  '))
+    while s.find('  ')!=-1:
+        s = ' '.join(s.split('  '))
     while s[0]==' ':
         s = s[1:]
     while s[-1]==' ':
