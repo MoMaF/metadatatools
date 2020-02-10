@@ -7,9 +7,22 @@ import urllib.request
 import re
 import xml.etree.ElementTree as ET
 
+debug = False
+
 for id in sys.argv[1:]:
+    print('STARTING', id)
     #id = '117163'
-    s = urllib.request.urlopen('https://elonet.finna.fi/Record/kavi.elonet_elokuva_'+id).read().decode()
+
+    url = 'https://elonet.finna.fi/Record/kavi.elonet_elokuva_'+id
+    req = urllib.request.Request(url)
+    try: urllib.request.urlopen(req)
+    except urllib.error.URLError as e:
+        print(e.reason)
+        print()
+        continue
+    
+    s = urllib.request.urlopen(req).read().decode()
+
     # s = open('kavi.elonet_elokuva_'+id).read()
     # print(s)
 
@@ -27,8 +40,8 @@ for id in sys.argv[1:]:
         if l[:len(ex)]==ex:
             break
 
-    # print(a)
-    # print(a, file=open('raw-raw-'+id+'.xml', 'w'))
+    if debug:
+        print(a, file=open(id+'-raw-raw.xml', 'w'))
 
     a = re.sub('&lt;', '<', a)
     a = re.sub('&gt;', '>', a)
@@ -43,7 +56,8 @@ for id in sys.argv[1:]:
     a = re.sub('&amp;', '&', a)
     a = re.sub('<\?xml version="1.0"\?>', '<?xml version="1.0" encoding="utf-8"?>', a)
 
-    # print(a, file=open('raw-'+id+'.xml', 'w'))
+    if debug:
+        print(a, file=open(id+'-raw.xml', 'w'))
 
     root = ET.fromstring(a)
     ET.ElementTree(root).write(id+'.xml', encoding='utf-8', xml_declaration=True)
