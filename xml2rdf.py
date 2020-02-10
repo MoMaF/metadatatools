@@ -14,7 +14,7 @@ parser.add_argument('--persons', action='store_true',
                     help='produce output for (only) persons')
 parser.add_argument('--debug', action='store_true',
                     help='show debug output instead of RDF')
-parser.add_argument('files', action='append',
+parser.add_argument('files', nargs='+',
                     help='file.XML ...')
 args = parser.parse_args()
 if not args.movies and not args.persons:
@@ -32,9 +32,23 @@ P   = Namespace("http://www.wikidata.org/prop/"  )         ; g.bind("p",   P  )
 PS  = Namespace("http://www.wikidata.org/prop/statement/") ; g.bind("ps",  PS )
 PQ  = Namespace("http://www.wikidata.org/prop/qualifier/") ; g.bind("pq",  PQ )
 
+def clean(s):
+    if s is None:
+        return None
+    s = ' '.join(s.split('\n'))
+    s = ' '.join(s.split('  '))
+    while s[0]==' ':
+        s = s[1:]
+    while s[-1]==' ':
+        s = s[:-1]
+    return s
+
 pe = []
 
 for f in args.files:
+    if args.debug:
+        print('STARTING', f)
+
     root = ET.parse(f).getroot()
     cw   = root.findall("./CinematographicWork/Identifier[@IDTypeName='elonet_elokuva']/..")[0]
 
@@ -46,7 +60,7 @@ for f in args.files:
         dr = cw.findall("./HasAgent/Activity[@tehtava='ohjaus']/../AgentIdentifier/IDValue")[0].text
         pr = cw.findall("./HasAgent[@elonet-tag='elotuotantoyhtio']/AgentName")[0].text
         if args.debug:
-            print(id, ti, yr, dr, pr)
+            print(id, ti, dr, dn, pr, yr)
 
         uri = URIRef(movie+id)
         urd = URIRef(person+dr)
@@ -61,13 +75,17 @@ for f in args.files:
             i = a.findall("./AgentIdentifier/IDValue")[0].text
             n = a.findall("./AgentName")[0].text
             r = a.findall("./AgentName")[0].attrib.get('elokuva-elonayttelija-rooli', None);
+            n = clean(n)
+            r = clean(r)
             if args.debug:
                 print('    kred', i, n, r)
+
             urx = BNode()
             ura = URIRef(person+i)
-            g.add((uri, P.P161,    urx))        # cast member
-            g.add((urx, PS.P161,   ura))        # cast member
-            g.add((urx, PQ.P453,   Literal(r))) # character role
+            g.add((uri, P.P161,  urx))            # cast member
+            g.add((urx, PS.P161, ura))            # cast member
+            if r is not None:
+                g.add((urx, PQ.P453, Literal(r))) # character role
             pe.append((i, n))
             
         for a in cw.findall("./HasAgent[@elonet-tag='elokreditoimatonnayttelija']"):
@@ -76,15 +94,22 @@ for f in args.files:
                 i = i[0].text
                 n = a.findall("./AgentName")[0].text
                 r = a.findall("./AgentName")[0].attrib.get('elokuva-elokreditoimatonnayttelija-rooli', None);
+                n = clean(n)
+                r = clean(r)
                 if args.debug:
                     print(' ei-kred', i, n, r)
-                if i is not None:
+
+                if i is not None and n is not None:
                     urx = BNode()
                     ura = URIRef(person+i)
-                    g.add((uri, P.P161,    urx))
-                    g.add((urx, PS.P161,   ura))
-                    g.add((urx, PQ.P453,   Literal(r)))
+                    g.add((uri, P.P161,  urx))
+                    g.add((urx, PS.P161, ura))
+                    if r is not None:
+                        g.add((urx, PQ.P453, Literal(r)))
                     pe.append((i, n))
+
+        if args.debug:
+            print()
 
 x = set()
 if args.movies:
