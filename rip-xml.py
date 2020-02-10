@@ -1,15 +1,17 @@
 #! /usr/bin/env python3
 
-# 117212 117213 117163
-
-import sys
+import sys, re, argparse
 import urllib.request
-import re
 import xml.etree.ElementTree as ET
 
-debug = False
+parser = argparse.ArgumentParser(description='Rip Elonet XMLs.')
+parser.add_argument('--debug', action='store_true',
+                    help='store "raw" debug versions')
+parser.add_argument('files', nargs='+',
+                    help='file.XML ...')
+args = parser.parse_args()
 
-for id in sys.argv[1:]:
+for id in args.files:
     print('STARTING', id)
     #id = '117163'
 
@@ -22,10 +24,6 @@ for id in sys.argv[1:]:
         continue
     
     s = urllib.request.urlopen(req).read().decode()
-
-    # s = open('kavi.elonet_elokuva_'+id).read()
-    # print(s)
-
     sx = '&lt;?xml version=&quot;1.0&quot;?&gt;'
     ex = '&lt;/ExchangeSet&gt;'
 
@@ -40,7 +38,7 @@ for id in sys.argv[1:]:
         if l[:len(ex)]==ex:
             break
 
-    if debug:
+    if args.debug:
         print(a, file=open(id+'-raw-raw.xml', 'w'))
 
     a = re.sub('&lt;', '<', a)
@@ -56,7 +54,7 @@ for id in sys.argv[1:]:
     a = re.sub('&amp;', '&', a)
     a = re.sub('<\?xml version="1.0"\?>', '<?xml version="1.0" encoding="utf-8"?>', a)
 
-    if debug:
+    if args.debug:
         print(a, file=open(id+'-raw.xml', 'w'))
 
     root = ET.fromstring(a)
