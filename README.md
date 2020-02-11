@@ -1,6 +1,6 @@
 # metadatatools
 
-Scripts for extracting and handling KAVI's Elonet and MoMaF metadata
+Scripts for extracting and handling KAVI's Elonet and MoMaF metadata.
 
 ## `kavi-download`
 
@@ -21,10 +21,10 @@ forces storing of `ID-raw-raw.xml` and `ID-raw.xml` versions too.
 Reads in XML files on the command line and prints to STDOUT Turtle RDF
 knowledge graph of all movies and persons (actors and directors) found
 in them.  With arguments `--movies` and `--persons` prints only those
-nodes.  Links from movies to actors and characters are stored in the
-movie nodes.
+nodes.  Links from movies to directors, actors and characters are
+stored in the movie nodes, whereas the person nodes are quite empty.
 
-## example
+## examples
 
 ```bash
 ./kavi-download
