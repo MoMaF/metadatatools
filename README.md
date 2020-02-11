@@ -29,6 +29,8 @@ movie nodes.
 ```bash
 ./kavi-download
 ./xml2rdf.py *.xml > all.ttl
+sparql --data=all.ttl --query=../sparql/momaf-films.sq
 sparql --data=all.ttl --query=../sparql/actors-top-100.sq
+sparql --data=all.ttl --query=../sparql/tuntematon-sotilas-1955-roles.sq
 ```
 
