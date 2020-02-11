@@ -56,13 +56,15 @@ for f in args.files:
     if args.movies:
         id = cw.findall("./Identifier")[0].text
         ti = cw.findall("./IdentifyingTitle")[0].text
-        yr = int(cw.findall("./YearOfReference")[0].text)
+        yr = cw.findall("./YearOfReference")[0].text
         dn = cw.findall("./HasAgent/Activity[@tehtava='ohjaus']/../AgentName")[0].text
         dr = cw.findall("./HasAgent/Activity[@tehtava='ohjaus']/../AgentIdentifier/IDValue")[0].text
         pr = cw.findall("./HasAgent[@elonet-tag='elotuotantoyhtio']/AgentName")[0].text
         if args.debug:
             print(id, ti, dr, dn, pr, yr)
 
+        yr += "-01-01";
+        
         uri = URIRef(movie+id)
         urd = URIRef(person+dr)
         g.add((uri, RDFS.label, Literal(ti)))
