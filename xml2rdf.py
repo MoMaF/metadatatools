@@ -71,6 +71,7 @@ for f in args.files:
         g.add((uri, WDT.P2346,  Literal(id)))                    # Elonet movie ID
         g.add((uri, WDT.P272,   Literal(pr)))                    # production company
         g.add((uri, WDT.P57,    urd))                            # director
+        pe.append((dr, dn))
 
         for a in cw.findall("./HasAgent[@elonet-tag='elonayttelija']"):
             i = a.findall("./AgentIdentifier/IDValue")[0].text
