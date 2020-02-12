@@ -43,5 +43,8 @@ xmlstarlet tr ../sparql/xml-to-html-momaf.xsl tmp.xml > wikidata-of-momaf-films.
 
 sparql --data=all.ttl --query=../sparql/metadata-links-of-momaf-films.sq --results=xml > tmp.xml
 xmlstarlet tr ../sparql/xml-to-html-momaf.xsl tmp.xml > metadata-links-of-momaf-films.html
+
+sparql --data=all.ttl --query=../sparql/metadata-links-of-momaf-actors.sq --results=xml > tmp.xml
+xmlstarlet tr ../sparql/xml-to-html-momaf.xsl tmp.xml > metadata-links-of-momaf-actors.html
 ```
 
