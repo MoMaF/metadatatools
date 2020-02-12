@@ -32,5 +32,13 @@ stored in the movie nodes, whereas the person nodes are quite empty.
 sparql --data=all.ttl --query=../sparql/momaf-films.sq
 sparql --data=all.ttl --query=../sparql/actors-top-100.sq
 sparql --data=all.ttl --query=../sparql/tuntematon-sotilas-1955-roles.sq
+sparql --data=all.ttl --query=../sparql/wikidata-of-momaf-films.sq
+```
+
+## HTML output
+
+```bash
+sparql --data=all.ttl --query=../sparql/wikidata-of-momaf-films.sq --results=xml > tmp.xml
+xmlstarlet tr ../sparql/xml-to-html-momaf.xsl tmp.xml > wikidata-of-momaf-films.html
 ```
 
