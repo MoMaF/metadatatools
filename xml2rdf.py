@@ -116,7 +116,7 @@ for f in args.files:
             print()
 
 x = set()
-if args.movies:
+if args.persons:
     for i, n in pe:
         if args.debug:
             print('    pers', i, n)
