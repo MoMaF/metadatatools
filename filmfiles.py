@@ -1,33 +1,37 @@
 #! /usr/bin/env python3
 
 import sys
+import glob
 import pandas as pd
 import rdflib
 from rdflib import Namespace, URIRef, BNode, Literal
 from rdflib.graph import ConjunctiveGraph
-from rdflib.namespace import RDF, RDFS, OWL, XSD
+from rdflib.namespace import RDF, RDFS, OWL, XSD, DCTERMS
 
 g = ConjunctiveGraph()
+g.bind("dcterms", DCTERMS)
 
-WD  = Namespace("http://www.wikidata.org/entity/")         ; g.bind("wd",  WD )
-WDT = Namespace("http://www.wikidata.org/prop/direct/")    ; g.bind("wdt", WDT)
-P   = Namespace("http://www.wikidata.org/prop/"  )         ; g.bind("p",   P  )
-PS  = Namespace("http://www.wikidata.org/prop/statement/") ; g.bind("ps",  PS )
-PQ  = Namespace("http://www.wikidata.org/prop/qualifier/") ; g.bind("pq",  PQ )
-
-elonet = "http://elonet.finna.fi/"
-movie  = elonet+"movie#"
+movie = "http://elonet.finna.fi/movie#"
 
 def handle_one(f):
-    # print(f)
-    v = '/scratch/project_xxx/'+str(f.elonet_id)+'.mp4'
+    v = '/scratch/project_2002528/films/'+str(f.elonet_id)+'[-_]*'
+    # print(f, v)
+    v = glob.glob(v)
+    if len(v)==0:
+        v = ['not found']
+    v = v[0]
+    av = 'https://a3s.fi/momaf/'+v[25:]
+    picsom_label = ('000000'+str(f.elonet_id))[-7:]
+    picsom_uri = 'http://picsom.aalto.fi/momaf/'+picsom_label
+    quality = f.quality
     uri = URIRef(movie+str(f.elonet_id))
-    g.add((uri, RDFS.label, Literal(f.Index)))
-    g.add((uri, WDT.P31,    Literal(v)))   # instance of * film
-    g.add((uri, WDT.P577,   Literal(f.date, datatype=XSD.date))) # publication date
-        # g.add((uri, WDT.P2346,  Literal(id)))                    # Elonet movie ID
-    g.add((uri, WDT.P272,   Literal(f.provider)))                    # production company
-    g.add((uri, WDT.P57,    Literal(f.quality)))                            # director
+    g.add((uri, DCTERMS.date,        Literal(f.date, datatype=XSD.date)))
+    g.add((uri, DCTERMS.contributor, Literal(f.provider)))
+    g.add((uri, DCTERMS.medium,      Literal(v)))
+    g.add((uri, DCTERMS.medium,      Literal(av)))
+    g.add((uri, DCTERMS['format'],   Literal("video/mp4")))
+    g.add((uri, DCTERMS.relation,    Literal(picsom_uri)))
+    g.add((uri, Literal("quality"),  Literal(quality)))
 
 assert len(sys.argv)==2, 'Exactly one argument <filename.tsv> is required'
     
