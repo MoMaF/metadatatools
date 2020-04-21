@@ -28,9 +28,9 @@ def handle_one(f):
     g.add((uri, DCTERMS.date,        Literal(f.date, datatype=XSD.date)))
     g.add((uri, DCTERMS.contributor, Literal(f.provider)))
     g.add((uri, DCTERMS.medium,      Literal(v)))
-    g.add((uri, DCTERMS.medium,      Literal(av)))
+    g.add((uri, DCTERMS.medium,      URIRef(av)))
     g.add((uri, DCTERMS['format'],   Literal("video/mp4")))
-    g.add((uri, DCTERMS.relation,    Literal(picsom_uri)))
+    g.add((uri, DCTERMS.relation,    URIRef(picsom_uri)))
     g.add((uri, Literal("quality"),  Literal(quality)))
 
 assert len(sys.argv)==2, 'Exactly one argument <filename.tsv> is required'
