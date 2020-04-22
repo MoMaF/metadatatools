@@ -23,7 +23,9 @@ def handle_one(f):
     av = 'https://a3s.fi/momaf/'+v[25:]
     picsom_label = ('000000'+str(f.elonet_id))[-7:]
     picsom_uri = 'http://picsom.aalto.fi/momaf/'+picsom_label
-    quality = f.quality
+    source = f.quality
+    if source=='*':
+        source = 'KAVI'
     uri = URIRef(movie+str(f.elonet_id))
     g.add((uri, DCTERMS.date,        Literal(f.date, datatype=XSD.date)))
     g.add((uri, DCTERMS.contributor, Literal(f.provider)))
@@ -31,7 +33,7 @@ def handle_one(f):
     g.add((uri, DCTERMS.medium,      URIRef(av)))
     g.add((uri, DCTERMS['format'],   Literal("video/mp4")))
     g.add((uri, DCTERMS.relation,    URIRef(picsom_uri)))
-    g.add((uri, Literal("quality"),  Literal(quality)))
+    g.add((uri, DCTERMS.source,      Literal(source)))
 
 assert len(sys.argv)==2, 'Exactly one argument <filename.tsv> is required'
     
