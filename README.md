@@ -28,10 +28,12 @@ stored in the movie nodes, whereas the person nodes are quite empty.
 
 Reads the national filmography data from https://elonet.finna.fi/, and
 parses the pages for url links to Elonet database. List of url's is
-saved to file `kf-filmurls.txt`.
+saved to file `kf-filmurls.txt`, if chosen by option, and the xml
+files are saved in current directory, just like `rip-xml.py`. These
+files can then be given to `xml2rdf.py` for further processing.
 
-The results of this could be used with `xml2rdf.py` but that script
-needs slight modifications before the data can be used.
+Run `kf-filmurls.py --help` for information on arguments. By default,
+loads only a selection of 10 files.
 
 ## examples
 
