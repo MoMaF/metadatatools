@@ -24,6 +24,15 @@ in them.  With arguments `--movies` and `--persons` prints only those
 nodes.  Links from movies to directors, actors and characters are
 stored in the movie nodes, whereas the person nodes are quite empty.
 
+## `kf-filmurls.py`
+
+Reads the national filmography data from https://elonet.finna.fi/, and
+parses the pages for url links to Elonet database. List of url's is
+saved to file `kf-filmurls.txt`.
+
+The results of this could be used with `xml2rdf.py` but that script
+needs slight modifications before the data can be used.
+
 ## examples
 
 ```bash
