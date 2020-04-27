@@ -32,6 +32,9 @@ saved to file `kf-filmurls.txt`, if chosen by option, and the xml
 files are saved in current directory, just like `rip-xml.py`. These
 files can then be given to `xml2rdf.py` for further processing.
 
+Run `kf-filmurls.py --help` for information on arguments. By default,
+loads only a selection of 10 files.
+
 ## examples
 
 ```bash
