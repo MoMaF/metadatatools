@@ -32,8 +32,8 @@ ns = {'atom':'http://www.w3.org/2005/Atom',
 if args.fulldata:
     filmographyurl=filmographyurl_full
 else:
-    filmographyrul=filmographyurl_test
-
+    filmographyurl=filmographyurl_test
+    
 def parse_and_collect(url):
     if args.debug: print(url)
     respage = requests.get(url).text
