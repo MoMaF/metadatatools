@@ -60,7 +60,7 @@ def get_and_save_xml(url):
     if args.debug: print(filmid)
     ET.ElementTree(xmltree).write(filmid+".xml",encoding="UTF-8",xml_declaration=True)
     
-urllist = list(map(lambda l: l.text,parse_and_collect(filmographyurl_test)))
+urllist = list(map(lambda l: l.text,parse_and_collect(filmographyurl)))
 if args.csvoutput:
     with open('kf-filmurls.txt','w') as of:
         of.write("\n".join(urllist))
