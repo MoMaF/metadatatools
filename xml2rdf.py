@@ -57,23 +57,29 @@ for f in args.files:
         id = cw.findall("./Identifier")[0].text
         ti = cw.findall("./IdentifyingTitle")[0].text
         yr = cw.findall("./YearOfReference")[0].text
-        dn = cw.findall("./HasAgent/Activity[@tehtava='ohjaus']/../AgentName")[0].text
-        dr = cw.findall("./HasAgent/Activity[@tehtava='ohjaus']/../AgentIdentifier/IDValue")[0].text
         pr = cw.findall("./HasAgent[@elonet-tag='elotuotantoyhtio']/AgentName")[0].text
         if args.debug:
-            print(id, ti, dr, dn, pr, yr)
+            print(id, ti, pr, yr)
 
         yr += "-01-01";
         
         uri = URIRef(movie+id)
-        urd = URIRef(person+dr)
         g.add((uri, RDFS.label, Literal(ti)))
         g.add((uri, WDT.P31,    P.Q11424))                       # instance of * film
         g.add((uri, WDT.P577,   Literal(yr, datatype=XSD.date))) # publication date
         g.add((uri, WDT.P2346,  Literal(id)))                    # Elonet movie ID
         g.add((uri, WDT.P272,   Literal(pr)))                    # production company
-        g.add((uri, WDT.P57,    urd))                            # director
-        pe.append((dr, dn))
+
+        for a in cw.findall("./HasAgent/Activity[@tehtava='ohjaus']/.."):
+            dn = a.find("./AgentName").text
+            dr = a.find("./AgentIdentifier/IDValue").text
+            if args.debug:
+                print('    dir ',dr, dn)
+
+            urd = URIRef(person+dr)
+            g.add((uri, WDT.P57,    urd))                            # director
+            pe.append((dr, dn))
+
 
         for a in cw.findall("./HasAgent[@elonet-tag='elonayttelija']"):
             i = a.findall("./AgentIdentifier/IDValue")[0].text
