@@ -41,6 +41,8 @@ Queries the SPARQL endpoint at
 http://momaf-data.utu.fi:3030/momaf-raw/sparql and retrieves the
 contents of Synopsis, Content description and Review for all movies. 
 
+Uses SPARQLWrapper, from https://rdflib.dev/sparqlwrapper/ 
+
 This is not a complete tool but a demonstration of how to get data
 from the triple store to Python as JSON.
 
