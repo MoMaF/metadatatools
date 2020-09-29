@@ -35,6 +35,15 @@ files can then be given to `xml2rdf.py` for further processing.
 Run `kf-filmurls.py --help` for information on arguments. By default,
 loads only a selection of 10 files.
 
+## `sparql_get_freetext.py`
+
+Queries the SPARQL endpoint at
+http://momaf-data.utu.fi:3030/momaf-raw/sparql and retrieves the
+contents of Synopsis, Content description and Review for all movies. 
+
+This is not a complete tool but a demonstration of how to get data
+from the triple store to Python as JSON.
+
 ## examples
 
 ```bash
