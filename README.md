@@ -46,6 +46,13 @@ Uses SPARQLWrapper, from https://rdflib.dev/sparqlwrapper/
 This is not a complete tool but a demonstration of how to get data
 from the triple store to Python as JSON.
 
+## `sparql_get_person_image_links.py`
+
+Queries the SPARQL endpoint at http://momaf-data.utu.fi:3030/momaf-raw/sparql and retrieves the data connecting individual persons and still images. The query returns more than just the necessary fields; whenever creating data that should be fed back to the database, either the field `PersonElonetID` or the IRI in `person` should be used. The name is not necessarily good enough for uniquely identifying the person.
+
+This is not a complete tool, but a demonstration of how to get data out of the triple store.
+
+
 ## examples
 
 ```bash
