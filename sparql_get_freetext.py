@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 # sparql_get_freetext.py
 
 # Script base for retrieving the Content description, Synopsis and Review data from the MoMaF triple store.
