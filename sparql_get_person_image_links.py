@@ -31,9 +31,7 @@ prefix momaf: <http://momaf-data.utu.fi/>
 SELECT ?person ?name ?PersonElonetID ?image ?filmname ?filmID ?image_url WHERE {
   ?person a momaf:Person; rdfs:label ?name; momaf:elonet_person_ID ?PersonElonetID .
   ?image a momaf:Image ; momaf:hasAgent ?person ; momaf:sourcefile ?image_url .
-  ?image momaf:hasAgent ?film .
-  ?film a momaf:Movie .
-  ?film skos:prefLabel ?filmname; momaf:elonet_movie_ID ?filmID .
+  ?image momaf:hasAgent [ a momaf:Movie ; skos:prefLabel ?filmname; momaf:elonet_movie_ID ?filmID ] .
 } having (?name!=?PersonElonetID)
 limit 10
 """)
