@@ -18,12 +18,19 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 prefix skos-core: <http://www.w3.org/2004/02/skos/core#>
 prefix momaf: <http://momaf-data.utu.fi/>
 
-select ?filmiri ?id ?year ?synopsis ?description ?review
+select ?filmiri ?id ?year ?synopsis ?contentdescription ?review ?commentary ?outdoorloc ?indoorloc ?studioloc
 where
 { ?filmiri a momaf:Movie ; momaf:elonet_movie_ID ?id ; skos-core:prefLabel ?name; momaf:productionyear ?year.
-  optional { ?filmiri  momaf:contentDescription [ rdfs:label "Synopsis"@fi; rdfs:comment ?synopsis ] }
-  optional { ?filmiri momaf:contentDescription [ rdfs:label "Content description"@fi; rdfs:comment ?description ] }
-  optional { ?filmiri momaf:review ?review }
+  optional { ?filmiri  momaf:hasSynopsis ?synopsis  }
+  optional { ?filmiri momaf:hasContentDescription ?contentdescription }
+  optional { ?filmiri momaf:hasReview ?review }
+  optional { ?filmiri momaf:hasCommentary ?commentary }
+  optional { ?filmiri momaf:hasFilmingLocationFullDescription [  
+               a momaf:OutdoorlocationFulldescription; rdfs:comment ?outdoorloc ] }
+  optional { ?filmiri momaf:hasFilmingLocationFullDescription [  
+               a momaf:IndoorlocationFulldescription; rdfs:comment ?indoorloc ] }
+  optional { ?filmiri momaf:hasFilmingLocationFullDescription [  
+               a momaf:StudiolocationFulldescription; rdfs:comment ?studioloc ] }
   .
 } limit 3
 """)
@@ -32,7 +39,7 @@ sparql.setReturnFormat(JSON)
 results = sparql.query().convert()
 
 # How to get the result content for 'synopsis' for the first film
-print(results['results']['bindings'][0]['synopsis'])
+print(results['results']['bindings'][0]['studioloc'])
 
 
 # Looping over all results
