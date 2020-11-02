@@ -28,11 +28,19 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 prefix momaf: <http://momaf-data.utu.fi/>
 
-SELECT ?person ?name ?PersonElonetID ?image ?filmname ?filmID ?image_url WHERE {
-  ?person a momaf:Person; rdfs:label ?name; momaf:elonet_person_ID ?PersonElonetID .
-  ?image a momaf:Image ; momaf:hasAgent ?person ; momaf:sourcefile ?image_url .
-  ?image momaf:hasAgent [ a momaf:Movie ; skos:prefLabel ?filmname; momaf:elonet_movie_ID ?filmID ] .
-} having (?name!=?PersonElonetID)
+SELECT ?person ?name ?PersonElonetID ?image ?filmname ?filmID ?image_url 
+WHERE {
+  ?person a momaf:Person; 
+          skos:prefLabel ?name; 
+          momaf:elonet_person_ID ?PersonElonetID .
+  ?image a momaf:Image ; 
+          momaf:hasMember [ momaf:hasAgent ?person ];
+          momaf:sourcefile ?image_url ;
+          momaf:hasMember [ momaf:hasAgent ?movie ]. 
+  ?movie a momaf:Movie ; 
+          skos:prefLabel ?filmname; 
+          momaf:elonet_movie_ID ?filmID .
+} 
 limit 10
 """)
 
