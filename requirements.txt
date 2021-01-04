@@ -1,3 +1,5 @@
 rdflib
+rdflib_jsonld
 pandas
 lxml
+SPARQLWrapper
