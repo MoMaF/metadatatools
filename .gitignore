@@ -1,6 +1,6 @@
 # MoMaF additions:
 *.xml
-*.ttl
+/*.ttl
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

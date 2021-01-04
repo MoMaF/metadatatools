@@ -1,0 +1,42 @@
+@prefix momaf: <http://momaf-data.utu.fi/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+
+# The id string after the prefix below should be unique
+# For non-elonet data, use suitable construct, like "imdb_image_xxxx" etc.
+momaf:elonet_materiaali_kuva_24607
+    # This is an image; obligatory.
+    a                   momaf:Image ;
+    # Free-text labels. Not strictly necessary.
+    rdfs:label          "24607_V750020E49.jpg" ;
+    skos:prefLabel      "24607_V750020E49.jpg" ;
+    # Used only for Elonet-based data, allows to connect back
+    # If you need another like this (IMDB_ID?) that can be done
+    momaf:elonet_ID     "elonet_materiaali_kuva_24607" ;
+    # hasMember is used to cross-reference other material in database
+    # Each membership is an anonymous node between []
+    # References for an image are "ImageObjects"
+    # This first one connects this image to a movie.
+    # If you external photographs of persons, don't link the image to a movie
+    momaf:hasMember     [
+        a               momaf:ImageObject ;
+        momaf:hasAgent  momaf:elonet_elokuva_100001
+        ] ;
+    # These two are references to persons in the database
+    momaf:hasMember     [
+        a               momaf:ImageObject ;
+        momaf:hasAgent  momaf:elonet_henkilo_252539
+        ] ;
+    momaf:hasMember     [
+        a               momaf:ImageObject ;
+        momaf:hasAgent  momaf:elonet_henkilo_223172
+        ] ;
+    # Should be same as the id string used to identify the whole node. In this case, is not, which is an error.
+    momaf:identifier    "24607" ;
+    # Data source, freetext
+    momaf:recordSource  "Kansallinen audiovisuaalinen instituutti" ;
+    # License/permissions
+    momaf:rights        "Luvanvarainen käyttö / ei tiedossa" ;
+    # URI for image file. Should be used to store an actual location for the file
+    momaf:sourcefile    "http://www.elonet.fi/tenho/media/24607_V750020E49.jpg" .
