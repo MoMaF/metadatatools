@@ -244,7 +244,7 @@ need to define the ver and object.
     </rdf:Description>
   </xsl:template>
 
-  <!-- Various IF fields. This is not good, results are not unique in
+  <!-- Various ID fields. This is not good, results are not unique in
        case of Images. -->
   <xsl:template match="Identifier[@scheme='KAVI']">
     <xsl:choose>
@@ -580,11 +580,16 @@ whole filming location description as it is.
     <xsl:apply-templates/>
     <xsl:apply-templates mode="fulldesc"/>
   </xsl:template>
+  <!-- This is the first parsin of filming locations.
+
+This tries really hard to find sensible place names and scene locations from the data.
+-->
   <xsl:template match="elokuva_ulkokuvat|elokuva_sisakuvat|elokuva_studiot">
     <xsl:variable name="ins"><xsl:value-of select="replace(replace(.,'&amp;','&amp;amp;'),'I&gt;','i&gt;')"/></xsl:variable>
     <xsl:variable name="tp" select="name()"/>
     <xsl:variable name="elname">http://momaf-data.utu.fi/<xsl:value-of
     select="$locmap/momaf:orig[@key=$tp]"/></xsl:variable>
+    <!-- In the data, filming locations are separated by <br/> elements. -->
     <xsl:for-each-group select="parse-xml-fragment($ins)/node()" group-adjacent="not(name()='br')" >
 	<xsl:variable name="adplace">
 	  <xsl:apply-templates select="current-group()" mode="adplace"/>
@@ -603,8 +608,9 @@ whole filming location description as it is.
 	  </xsl:for-each>
 	</xsl:for-each-group>
     </xsl:for-each-group>
-
   </xsl:template>
+  <!-- This is the second parsing of filming locations. 
+  -->
   <xsl:template match="elokuva_ulkokuvat|elokuva_sisakuvat|elokuva_studiot" mode="fulldesc">
     <xsl:variable name="tp" select="name()"/>
     <xsl:variable name="elname">http://momaf-data.utu.fi/<xsl:value-of select="$locmap/momaf:orig[@key=$tp]"/></xsl:variable>
@@ -619,6 +625,8 @@ whole filming location description as it is.
       </rdf:Description>
     </momaf:hasFilmingLocationFullDescription>
   </xsl:template>
+  <!-- "adminplace" in this terminology refers to an administrative
+       name of a place: a town, city, country, etc. -->
   <xsl:template match="/node()[matches(.,'^.*: .*$')]" mode="adplace">
     <xsl:analyze-string select="." regex="^(.*): ">
       <xsl:matching-substring>
@@ -633,7 +641,7 @@ whole filming location description as it is.
       <xsl:non-matching-substring/>
     </xsl:analyze-string>
   </xsl:template>
-
+  <!-- Parsing of scene locations -->
   <xsl:template match="/node()[matches(.,'[,:^] (.*) \(')]" mode="scenes">
     <xsl:analyze-string select="." regex="[,:^] (.*) \(">
       <xsl:matching-substring>
@@ -648,7 +656,8 @@ whole filming location description as it is.
       <momaf:scenelocation><xsl:value-of select="normalize-space(.)"/></momaf:scenelocation>
     </xsl:for-each>
   </xsl:template>
-  
+
+  <!-- Remove line breaks. -->
   <xsl:template match="/br">
   </xsl:template>
   <!--xsl:template match="/i[count(following-sibling::br)>0]">
@@ -671,11 +680,19 @@ whole filming location description as it is.
 	</xsl:for-each>
       </xsl:matching-substring>
     </xsl:analyze-string>
-  </xsl:template-->
+    </xsl:template-->
+  <!-- Try to match the information source in the filming locations.
+
+TODO this does  not work .-->
   <xsl:template match="/node()[starts-with(.,'-')]" mode="locations" priority="1">
     <momaf:sourcedata><momaf:sourcedesc><xsl:apply-templates/></momaf:sourcedesc></momaf:sourcedata>
   </xsl:template>
+  <!-- Skip the KAVI information gathering data
+
+This field contains requests for information aimed at the public using
+Elonet data. -->
   <xsl:template match="ProductionEvent[@elonet-tag=('tiedonkeruu','elotiedonkeruu')]"/>
+  <!-- Various technical data -->
   <xsl:template match="ProductionEvent/ProductionEventType[.='MISC']">
     <momaf:soundsystem><xsl:value-of select="@elokuva-alkupaanijarjestelma"/></momaf:soundsystem>
     <momaf:duration><xsl:value-of select="@elokuva-alkupkesto"/></momaf:duration>
@@ -684,31 +701,38 @@ whole filming location description as it is.
     <momaf:aspectratio><xsl:value-of select="@elokuva-kuvasuhde"/></momaf:aspectratio>
   </xsl:template>
 
+  <!-- The use rights of tthe images and videos is confusingly documented.
+
+TODO Check if this is really so. -->
   <xsl:template match="ProductionEventType[@elokuva-elonet-materiaali-kuva-url!='' or @elokuva-elonet-materiaali-video-url!='']">
     <momaf:rights><xsl:value-of select="@finna-kayttooikeus"/></momaf:rights>
   </xsl:template>
 
+  <!-- Comments on filming locations. -->
   <xsl:template match="ProductionEvent[@elonet-tag='kuvauspaikkahuomautus']/elokuva_kuvauspaikkahuomautus">
     <momaf:locationcomment><xsl:apply-templates/></momaf:locationcomment>
   </xsl:template>
 
+  <!-- Co-operation in film production ? -->
   <xsl:template match="ProductionEvent[@elonet-tag='yhteistyokumppanit']/elokuva_yhteistyokumppanit">
     <momaf:cooperation><xsl:apply-templates/></momaf:cooperation>
   </xsl:template>
 
-
+  <!-- Review samples -->
   <xsl:template match="ProductionEvent[@elonet-tag='lehdistoarvio']">
     <momaf:hasReview>
       <xsl:apply-templates select="elokuva_lehdistoarvio"/>
     </momaf:hasReview>
   </xsl:template>
-  
+
+  <!-- Commentary -->
   <xsl:template match="ProductionEvent[@elonet-tag='huomautukset']">
     <momaf:hasCommentary>
       <xsl:apply-templates select="elokuva_huomautukset"/>
     </momaf:hasCommentary>
   </xsl:template>
-  
+
+  <!-- Synopsis -->
   <xsl:template match="ContentDescription[DescriptionType='Synopsis']">
     <momaf:hasSynopsis>
       <xsl:attribute name="xml:lang"><xsl:apply-templates select="Language"/></xsl:attribute>
@@ -716,6 +740,7 @@ whole filming location description as it is.
     </momaf:hasSynopsis>
   </xsl:template>
 
+  <!-- Content description -->
   <xsl:template match="ContentDescription[DescriptionType='Content description']">
     <momaf:hasContentDescription>
       <xsl:attribute name="xml:lang"><xsl:apply-templates select="Language"/></xsl:attribute>
@@ -723,6 +748,10 @@ whole filming location description as it is.
     </momaf:hasContentDescription>
   </xsl:template>
 
+    <!-- Content description language, see thempate above -->
+  <xsl:template match="ContentDescription/Language"><xsl:value-of select="text()"/></xsl:template>
+
+  
   <!--xsl:template match="DescriptionType">
     <rdfs:label xml:lang="{../Language/text()}"><xsl:apply-templates/></rdfs:label>
   </xsl:template>
@@ -730,6 +759,5 @@ whole filming location description as it is.
     <rdfs:comment  xml:lang="{../Language/text()}"><xsl:apply-templates/></rdfs:comment>
   </xsl:template-->
 
-  <xsl:template match="ContentDescription/Language"><xsl:value-of select="text()"/></xsl:template>
 
 </xsl:stylesheet>
