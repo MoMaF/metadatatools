@@ -10,6 +10,14 @@ downloaded.
 
 `kavi-download` invokes `rip-xml.py` for each movie individually
 
+## `kf-to-rdf.xslt`
+
+XSLT template for converting XML files from the Elonet database to
+RDF/XML using the MoMaF ontology. These can be used by almost RDF tool
+and uploaded to triple stores.
+
+Use SaxonHE or similar XSL processor with XSLT 3.0 support to convert.
+
 ## `rip-xml.py`
 
 Downloads Elonet HTMLs and rips the inlined XML for any number of
@@ -65,6 +73,23 @@ sparql --data=all.ttl --query=../sparql/actors-top-100.sq
 sparql --data=all.ttl --query=../sparql/tuntematon-sotilas-1955-roles.sq
 sparql --data=all.ttl --query=../sparql/wikidata-of-momaf-films.sq
 ```
+
+### Converting Elonet XML to RDF
+Requirements:
+- `kf-to-rdf.xsl` file in this repository
+- JAR of Saxon-HE XSLt Processor (See https://www.saxonica.com/download/java.xml). Saxon-HE is the open source version, with somewhat limited functionality but fully suitable for this purpose.
+
+How to run:
+```bash
+java -jar saxon-he-10.2.jar -xsl:kf-to-rdf.xslt -threads:3 -t -s:kf-data/ -o:kf-data-rdf/
+```
+
+Explanations:
+- jar: expects to find the downloaded Saxon-HE JAR file in current directory. Paths can be used
+- xsl: name of the XSL file to use
+- threads: How many CPU cores to use. Speeds up the process considerable is >1, but see how many you have available
+- s: Source diredtory. Transforms all *.xml files in this directory
+- o: Target directory. Resulting RDF/XML files are placed in this directory. If same as source, original files may be overwritten.
 
 ## HTML output
 
