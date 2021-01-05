@@ -1,5 +1,5 @@
 # MoMaF additions:
-*.xml
+/*.xml
 /*.ttl
 
 # Byte-compiled / optimized / DLL files

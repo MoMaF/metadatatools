@@ -1,0 +1,2014 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://momaf-data.utu.fi/"
+     xml:base="http://momaf-data.utu.fi/"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:wdt="http://www.wikidata.org/prop/direct/"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:momaf="http://momaf-data.utu.fi/"
+     xmlns:opla-sd="http://ontologydesignpatterns.org/opla-sd#">
+    <owl:Ontology rdf:about="http://momaf-data.utu.fi/">
+        <rdfs:comment>Changes for 0.3:
+
+- Added data property IMDb_ID</rdfs:comment>
+        <rdfs:comment>ontology has been originally created in order to store and process the Elonet movie metadata from the National Audiovisual Institute of Finland.</rdfs:comment>
+        <rdfs:label>Ontology for MoMaF project</rdfs:label>
+        <owl:versionInfo>v. 0.3pre</owl:versionInfo>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Datatypes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.w3.org/2001/XMLSchema#date -->
+
+    <rdfs:Datatype rdf:about="http://www.w3.org/2001/XMLSchema#date"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://momaf-data.utu.fi/appearsIn -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/appearsIn">
+        <owl:inverseOf rdf:resource="http://momaf-data.utu.fi/hasAgent"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/atTheatre -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/atTheatre">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Screening"/>
+        <rdfs:range rdf:resource="http://momaf-data.utu.fi/Theatre"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/hasAdminplace -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/hasAdminplace">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Placeable"/>
+        <rdfs:range rdf:resource="http://momaf-data.utu.fi/Adminplace"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/hasAgent -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/hasAgent">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:range rdf:resource="http://momaf-data.utu.fi/Agent"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/hasBroadcast -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/hasBroadcast">
+        <owl:inverseOf rdf:resource="http://momaf-data.utu.fi/isBroadcastOf"/>
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
+        <rdfs:range rdf:resource="http://momaf-data.utu.fi/Broadcast"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/hasClassification -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/hasClassification">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
+        <rdfs:range rdf:resource="http://momaf-data.utu.fi/Classification"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/hasFilmingLocation -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/hasFilmingLocation">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Media"/>
+        <rdfs:range rdf:resource="http://momaf-data.utu.fi/Filminglocation"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/hasFilmingLocationFullDescription -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/hasFilmingLocationFullDescription">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Media"/>
+        <rdfs:range rdf:resource="http://momaf-data.utu.fi/FilminglocationFulldescription"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/hasGenre -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/hasGenre">
+        <rdfs:subPropertyOf rdf:resource="http://momaf-data.utu.fi/hasVocabulary"/>
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
+        <rdfs:range rdf:resource="http://momaf-data.utu.fi/Genre"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/hasKeyword -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/hasKeyword">
+        <rdfs:subPropertyOf rdf:resource="http://momaf-data.utu.fi/hasVocabulary"/>
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
+        <rdfs:range rdf:resource="http://momaf-data.utu.fi/Subject"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/hasMember -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/hasMember">
+        <owl:inverseOf rdf:resource="http://momaf-data.utu.fi/isMemberIn"/>
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Media"/>
+        <rdfs:range rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/hasMovietype -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/hasMovietype">
+        <rdfs:subPropertyOf rdf:resource="http://momaf-data.utu.fi/hasVocabulary"/>
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
+        <rdfs:range rdf:resource="http://momaf-data.utu.fi/Movietype"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/hasScreening -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/hasScreening">
+        <owl:inverseOf rdf:resource="http://momaf-data.utu.fi/isScreeningOf"/>
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
+        <rdfs:range rdf:resource="http://momaf-data.utu.fi/Screening"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/hasVocabulary -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/hasVocabulary">
+        <owl:inverseOf rdf:resource="http://momaf-data.utu.fi/vocabularyUsedBy"/>
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Media"/>
+        <rdfs:range rdf:resource="http://momaf-data.utu.fi/Vocabulary"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/isBroadcastOf -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/isBroadcastOf"/>
+    
+
+
+    <!-- http://momaf-data.utu.fi/isMemberIn -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/isMemberIn"/>
+    
+
+
+    <!-- http://momaf-data.utu.fi/isScreeningOf -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/isScreeningOf"/>
+    
+
+
+    <!-- http://momaf-data.utu.fi/vocabularyUsedBy -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/vocabularyUsedBy"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://momaf-data.utu.fi/IMDb_ID -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/IMDb_ID">
+        <rdfs:comment>Contains the respective IMDb ID for the node. Is relevant for Movies and Persons, at least.</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/aspectratio -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/aspectratio">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/audience -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/audience">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
+        <rdfs:comment>Size of audience</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/award -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/award">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
+        <rdfs:comment>Award won</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/broadcastplace -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/broadcastplace">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Broadcast"/>
+        <rdfs:comment>&quot;Place&quot; of the Broadcast, i.e., TV Channel</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/classificationAgeRecommendation -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/classificationAgeRecommendation">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Classification"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/classificationAgency -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/classificationAgency">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Classification"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/classificationAmountOfParts -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/classificationAmountOfParts">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Classification"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/classificationCensoredDuration -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/classificationCensoredDuration">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Classification"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/classificationCensoredMeters -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/classificationCensoredMeters">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Classification"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/classificationClassContent -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/classificationClassContent">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Classification"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/classificationClasserType -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/classificationClasserType">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Classification"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/classificationDuration -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/classificationDuration">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Classification"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/classificationExplanation -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/classificationExplanation">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Classification"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/classificationFormat -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/classificationFormat">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Classification"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/classificationInstigator -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/classificationInstigator">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Classification"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/classificationLength -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/classificationLength">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Classification"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/classificationNotification -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/classificationNotification">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Classification"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/classificationNumber -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/classificationNumber">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Classification"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/classificationOrderedBy -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/classificationOrderedBy">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Classification"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/classificationOtherInfo -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/classificationOtherInfo">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Classification"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/classificationRating -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/classificationRating">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Classification"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/classificationScreenSize -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/classificationScreenSize">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Classification"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/classificationSubject -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/classificationSubject">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Classification"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/classificationTaxCategory -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/classificationTaxCategory">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Classification"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/color -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/color">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/copiesamount -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/copiesamount">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
+        <rdfs:comment>Number of film copies</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/date -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/date">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Datable"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+        <rdfs:comment>Date of the Datable that has this property. (See subclasses of Datable)</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/dateOfBirth -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/dateOfBirth">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Person"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/dateOfDeath -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/dateOfDeath">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Person"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/duration -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/duration">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/elonet_ID -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/elonet_ID">
+        <rdfs:comment>id string that has both he data type and number</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/elonet_corporate_ID -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/elonet_corporate_ID">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Company"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/elonet_group_ID -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/elonet_group_ID">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Group"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/elonet_movie_ID -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/elonet_movie_ID">
+        <owl:equivalentProperty rdf:resource="http://www.wikidata.org/prop/direct/P2346"/>
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
+        <rdfs:comment xml:lang="en">On purpose, the format is same as for Wikidata property P2346 so the content can be used to link to Wikidata.</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/elonet_person_ID -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/elonet_person_ID">
+        <owl:equivalentProperty rdf:resource="http://www.wikidata.org/prop/direct/P2387"/>
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Person"/>
+        <rdfs:comment xml:lang="en">On purpose, this is similar in format as the Wikidata property P2387 so the contents of this field can be used to link to Wikidata.</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/export -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/export">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
+        <rdfs:comment>Countries to which the film has been exported</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/hasCommentary -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/hasCommentary">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Media"/>
+        <rdfs:comment>&quot;Academic&quot; commentary of the film. Has contextualizing information about the film its production process, etc.</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/hasContentDescription -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/hasContentDescription">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Media"/>
+        <rdfs:comment>Content Description of the film.</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/hasReview -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/hasReview">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Media"/>
+        <rdfs:comment>Samples of reviews of the film.</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/hasSynopsis -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/hasSynopsis">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Media"/>
+        <rdfs:comment>Plot synopsis</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/identifier -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/identifier">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Media"/>
+        <rdfs:comment>Media number. Same as the number from Elonet ID:s, but exists only for media entities.</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/income -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/income">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
+        <rdfs:comment>Estimated income (at the theatres?)</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/length -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/length">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/localname -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/localname">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Filminglocation"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/music -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/music">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
+        <rdfs:comment>Music of the film</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/originalidea -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/originalidea">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
+        <rdfs:comment>Original idea for the film</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/originalwork -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/originalwork">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
+        <rdfs:comment>Original work on which the film is based</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/productioncountry -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/productioncountry">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/productionyear -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/productionyear">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/recordSource -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/recordSource">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Media"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/rights -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/rights">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Media"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/roleDescription -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/roleDescription">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Actor"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/scenelocation -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/scenelocation">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Filminglocation"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/skfid -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/skfid">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
+        <rdfs:comment>National Filmography ID</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/soundsystem -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/soundsystem">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
+        <rdfs:comment>Sound system used in the film. A free-text field.</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/sourcefile -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/sourcefile">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Media"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>The location (preferably URL) of the media file, if exists/known.</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/workDescription -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/workDescription">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.wikidata.org/prop/direct/P2346 -->
+
+    <owl:DatatypeProperty rdf:about="http://www.wikidata.org/prop/direct/P2346"/>
+    
+
+
+    <!-- http://www.wikidata.org/prop/direct/P2387 -->
+
+    <owl:DatatypeProperty rdf:about="http://www.wikidata.org/prop/direct/P2387"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://momaf-data.utu.fi/Actor -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Actor">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="en">actor</rdfs:label>
+        <rdfs:label xml:lang="fi">näyttelijä</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/ActorGroup -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/ActorGroup">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Actor"/>
+        <rdfs:label xml:lang="en">actor group</rdfs:label>
+        <rdfs:label xml:lang="fi">näyttelijäryhmä</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/ActorNonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/ActorNonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Actor"/>
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
+        <rdfs:label xml:lang="en">actor, non-credited</rdfs:label>
+        <rdfs:label xml:lang="fi">näyttelijär, kreditoimaton</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Adaptation -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Adaptation">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="en">adaptation</rdfs:label>
+        <rdfs:label xml:lang="fi">sovitus</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/AdaptationGroup -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/AdaptationGroup">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Adaptation"/>
+        <rdfs:label xml:lang="en">adaptation, non-credited</rdfs:label>
+        <rdfs:label xml:lang="fi">sovittaja, ryhmä</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Adminplace -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Adminplace">
+        <rdfs:comment xml:lang="en">An administrative name used to locate things. Name of a country, administrative region, city, town, commune, etc. Could be used to link to entities with same name in Wikidata or the SAPO ontology,</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Agent -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Agent">
+        <rdfs:comment xml:lang="en">A general superclass for different types of agents that could be involved in the movie making process. See subclasses (Company, Group, Person).</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Animation -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Animation">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">animaattori</rdfs:label>
+        <rdfs:label xml:lang="en">animation</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/AnimationCompany -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/AnimationCompany">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Animation"/>
+        <rdfs:label xml:lang="fi">animaatio, yhtiö</rdfs:label>
+        <rdfs:label xml:lang="en">animation company</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/AnimatorNonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/AnimatorNonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Animation"/>
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
+        <rdfs:label xml:lang="fi">animaattori, kreditoimaton</rdfs:label>
+        <rdfs:label xml:lang="en">animation, non-credited</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/AssistantDirector -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/AssistantDirector">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">apulaisohjaaja</rdfs:label>
+        <rdfs:label xml:lang="en">assistant director</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/AssistantDirectorNonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/AssistantDirectorNonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/AssistantDirector"/>
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
+        <rdfs:label xml:lang="fi">apulaisohjaaja, kreditoimaton</rdfs:label>
+        <rdfs:label xml:lang="en">assistant director, non-credited</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/AssistantEditor -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/AssistantEditor">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">apulaisleikkaaja</rdfs:label>
+        <rdfs:label xml:lang="en">assistant editor</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/AssistantEditorNonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/AssistantEditorNonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/AssistantEditor"/>
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
+        <rdfs:label xml:lang="fi">apulaisleikkaaja, kreditoimaton</rdfs:label>
+        <rdfs:label xml:lang="en">assistant editor, non-credited</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Broadcast -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Broadcast">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Datable"/>
+        <rdfs:comment xml:lang="en">Broadcast event for Movie. has data properties describing the boradcast event.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Choreographer -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Choreographer">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="en">choreographer</rdfs:label>
+        <rdfs:label xml:lang="fi">koreografi</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/ChoreographerNonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/ChoreographerNonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Choreographer"/>
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
+        <rdfs:label xml:lang="en">choreographer, non-credited</rdfs:label>
+        <rdfs:label xml:lang="fi">koreografi, kreditoimaton</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Cinematographer -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Cinematographer">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">Kuvaaja</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/CinematographerCompany -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/CinematographerCompany">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Cinematographer"/>
+        <rdfs:label xml:lang="fi">kuvaus, yhtiö</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/CinematographerGroup -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/CinematographerGroup">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Cinematographer"/>
+        <rdfs:label xml:lang="fi">kuvaus, ryhmä</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/CinematographerNonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/CinematographerNonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Cinematographer"/>
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
+        <rdfs:label xml:lang="fi">kuvaaja, kreditoimaton</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Classification -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Classification">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Datable"/>
+        <rdfs:comment xml:lang="en">Movie classification by rating agency. Has various data properties reflecting the data recorded for the classification instance.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/CoProductionCompany -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/CoProductionCompany">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionCompany"/>
+        <rdfs:label xml:lang="fi">osatuotantoyhtiö</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Company -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Company">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Agent"/>
+        <rdfs:comment xml:lang="en">A company or other non-human legal entity.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Conductor -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Conductor">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">kapellimestari</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/ConductorNonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/ConductorNonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Conductor"/>
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
+        <rdfs:label xml:lang="fi">kapellimestari, kreditoimaton</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Costumedesigner -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Costumedesigner">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">pukusuunnittelija</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/CostumedesignerGroup -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/CostumedesignerGroup">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Costumedesigner"/>
+        <rdfs:label xml:lang="fi">pukusuunnittelu, ryhmä</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/CostumedesignerNonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/CostumedesignerNonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Costumedesigner"/>
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
+        <rdfs:label xml:lang="fi">pukusuunnittelija, kreditoimaton</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Datable -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Datable">
+        <rdfs:comment xml:lang="en">Everything with a date. This class in used only as a domain for the data property &quot;date&quot;</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Dialogue -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Dialogue">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">dialogi</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/DialogueNonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/DialogueNonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Dialogue"/>
+        <rdfs:label xml:lang="fi">dialogi, kreditoimaton</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Director -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Director">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">ohjaaja</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/DirectorNonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/DirectorNonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Director"/>
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
+        <rdfs:label xml:lang="fi">ohjaaja, kreditoimaton</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Distributor -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Distributor">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">jakelija</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/DistributorCompany -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/DistributorCompany">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Distributor"/>
+        <rdfs:label xml:lang="fi">jakelija, yhtiö</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Editor -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Editor">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="en">editor</rdfs:label>
+        <rdfs:label xml:lang="fi">leikkaaja</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Expert -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Expert">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">asiantuntija</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/ExpertNonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/ExpertNonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Expert"/>
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
+        <rdfs:label xml:lang="fi">asiantuntija, kreditoimaton</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/FilmEpisode -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/FilmEpisode">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/MediaObject"/>
+        <rdfs:label xml:lang="fi">elokuvan kohtaus</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Filminglocation -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Filminglocation">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Placeable"/>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/FilminglocationFulldescription -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/FilminglocationFulldescription">
+        <rdfs:comment xml:lang="en">A generic superclass for free-text filming location descriptions. Can be used as node type in order to retrieve all free-text filming location descriptions (see subclasses).</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/FundingCompany -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/FundingCompany">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">rahoittaja</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Genre -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Genre">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Vocabulary"/>
+        <rdfs:comment xml:lang="en">A genre classification term.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Group -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Group">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Agent"/>
+        <rdfs:comment xml:lang="en">A group of individual humans appearing together under a common name: a band, a group of musician, a troupe.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Image -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Image">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Media"/>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/ImageObject -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/ImageObject">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/MediaObject"/>
+        <rdfs:label xml:lang="fi">kuva</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Indoorlocation -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Indoorlocation">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Filminglocation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/IndoorlocationFulldescription -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/IndoorlocationFulldescription">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/FilminglocationFulldescription"/>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Laboratory -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Laboratory">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">laboratorio</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Lightningdesigner -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Lightningdesigner">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">valosuunnittelija</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/LightningdesignerNonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/LightningdesignerNonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Lightningdesigner"/>
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
+        <rdfs:label xml:lang="fi">valosuunnittelija, kreditoimaton</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Media -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Media">
+        <rdfs:comment xml:lang="en">Superclass for all media types.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/MediaObject -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/MediaObject">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">mediaobjekti</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Movie -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Movie">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Media"/>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Movietype -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Movietype">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Vocabulary"/>
+        <rdfs:comment xml:lang="en">A moveitype term (Documentary, Fiction, etx.)</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Music -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Music">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">musiikki</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/MusicCompany -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/MusicCompany">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Music"/>
+        <rdfs:label xml:lang="fi">musiikki, yhtiö</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/MusicGroup -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/MusicGroup">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Music"/>
+        <rdfs:label xml:lang="fi">musiikki, ryhmä</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/MusicNonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/MusicNonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Music"/>
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
+        <rdfs:label xml:lang="fi">musiikki, kreditoimaton</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Musician -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Musician">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">muusikko</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/MusicianGroup -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/MusicianGroup">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Musician"/>
+        <rdfs:label xml:lang="fi">muusikkoryhmä</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/MusicianNonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/MusicianNonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Musician"/>
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
+        <rdfs:label xml:lang="fi">muusikko, kreditoimaton</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/NonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/NonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">kreditoimaton tekijä</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Originalwork -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Originalwork">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">aslkuperäisteos</rdfs:label>
+        <rdfs:label xml:lang="en">original work</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/OtherPerformer -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/OtherPerformer">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Performer"/>
+        <rdfs:label xml:lang="fi">muu esiintyjä</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Outdoorlocation -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Outdoorlocation">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Filminglocation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/OutdoorlocationFulldescription -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/OutdoorlocationFulldescription">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/FilminglocationFulldescription"/>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Performer -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Performer">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">esiintyjä</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/PerformerGroup -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/PerformerGroup">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Performer"/>
+        <rdfs:label xml:lang="fi">esiintyjäryhmä</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/PerformerNonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/PerformerNonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Performer"/>
+        <rdfs:label xml:lang="fi">esiintyjäryhmä</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Person -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Person">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Agent"/>
+        <rdfs:comment xml:lang="en">An individual human person in the Elonet database.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Photographer -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Photographer">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">valokuvaaja</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/PhotographerNonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/PhotographerNonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Photographer"/>
+        <rdfs:label xml:lang="fi">valokuvaaja, kreditoimaton</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Placeable -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Placeable">
+        <rdfs:comment xml:lang="en">A generic superclass for everything that has a place, esp. Adminplace.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Premiere -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Premiere">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Screening"/>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Producer -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Producer">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">tuottaja</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/ProducerNonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/ProducerNonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Producer"/>
+        <rdfs:label xml:lang="fi">tuottaja, kreditoimaton</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/ProductionCompany -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/ProductionCompany">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">tuotantoyhtiö</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/ProductionManager -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/ProductionManager">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="en">production manger</rdfs:label>
+        <rdfs:label xml:lang="fi">tuotantopäällikkö</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/ProductionManagerNonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/ProductionManagerNonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionManager"/>
+        <rdfs:label xml:lang="en">production manager, non-credited</rdfs:label>
+        <rdfs:label xml:lang="fi">tuotantpäällikkö, kreditoimaton</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/ProductionMember -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/ProductionMember">
+        <rdfs:comment xml:lang="en">Member of the movie production.
+
+This is the most generic class, and contains production members for which a more specific class could not be deduced from the original data. Can be used in queries as node type to retrieve all members of the movie production, including companies, groups, and documented non-credited members. See subclasses for more refined definitions.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Recordist -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Recordist">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="en">recordist</rdfs:label>
+        <rdfs:label xml:lang="fi">äänittäjä</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/RecordistNonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/RecordistNonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Recordist"/>
+        <rdfs:label xml:lang="en">recordist, non-credited</rdfs:label>
+        <rdfs:label xml:lang="fi">äänittäjä, kreditoimaton</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Screening -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Screening">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Datable"/>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Screenwriter -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Screenwriter">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">käsikirjoitus</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/ScreenwriterGroup -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/ScreenwriterGroup">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Screenwriter"/>
+        <rdfs:label xml:lang="fi">käsikirjoitus, ryhmä</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/ScreenwriterNonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/ScreenwriterNonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Screenwriter"/>
+        <rdfs:label xml:lang="fi">käsikirjoitus, kreditoimaton</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/ScriptTranslation -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/ScriptTranslation">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">käsikirjoituksen käännös</rdfs:label>
+        <rdfs:label xml:lang="en">script translator</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Setdesigner -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Setdesigner">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">lavastaja</rdfs:label>
+        <rdfs:label xml:lang="en">set designer</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/SetdesignerCompany -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/SetdesignerCompany">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Setdesigner"/>
+        <rdfs:label xml:lang="fi">lavastaja, yhtiö</rdfs:label>
+        <rdfs:label xml:lang="en">set designer company</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/SetdesignerGroup -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/SetdesignerGroup">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Setdesigner"/>
+        <rdfs:label xml:lang="fi">lavastaja, ryhmä</rdfs:label>
+        <rdfs:label xml:lang="en">set designer group</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/SetdesignerNonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/SetdesignerNonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Setdesigner"/>
+        <rdfs:label xml:lang="fi">lavastaja, kreditoimaton</rdfs:label>
+        <rdfs:label xml:lang="en">set designer, non-credited</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Sounddesigner -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Sounddesigner">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="en">sound designer</rdfs:label>
+        <rdfs:label xml:lang="fi">äänisuunnittelija</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/SounddesignerNonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/SounddesignerNonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Sounddesigner"/>
+        <rdfs:label xml:lang="en">sound designer, non-credited</rdfs:label>
+        <rdfs:label xml:lang="fi">äänisuunnittelija, kreditoimaton</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Soundeditor -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Soundeditor">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="en">sound editor</rdfs:label>
+        <rdfs:label xml:lang="fi">äänileikkaaja</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/StillPhotographer -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/StillPhotographer">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Photographer"/>
+        <rdfs:label xml:lang="fi">still-kuvaaja</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/StillPhotographerNonCredited -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/StillPhotographerNonCredited">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/StillPhotographer"/>
+        <rdfs:label xml:lang="fi">still-kuvaaja, kreditoimaton</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Studiolocation -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Studiolocation">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Filminglocation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/StudiolocationFulldescription -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/StudiolocationFulldescription">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/FilminglocationFulldescription"/>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Subject -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Subject">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Vocabulary"/>
+        <rdfs:comment xml:lang="en">Subject matter terms describing the content and themes of the movie.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Theatre -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Theatre">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Placeable"/>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Translator -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Translator">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
+        <rdfs:label xml:lang="fi">kääntäjä</rdfs:label>
+        <rdfs:label xml:lang="en">translator</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Video -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Video">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Media"/>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Vocabulary -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Vocabulary">
+        <rdfs:comment xml:lang="en">A superclass for different vocabularies that are used to describe and classigy movies.</rdfs:comment>
+    </owl:Class>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+    <rdf:Description>
+        <rdfs:comment xml:lang="en">This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view.</rdfs:comment>
+    </rdf:Description>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+

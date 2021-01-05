@@ -18,6 +18,14 @@ and uploaded to triple stores.
 
 Use SaxonHE or similar XSL processor with XSLT 3.0 support to convert.
 
+## `ontology/MoMaF-ontology.xml`
+
+The MoMaF ontology in RDF/XML format. This file has been saved from
+Protégé (5.5.0), and is used as such by the triple store for making
+inferences based on the data.
+
+This file can offer insights as to how metadata is organized.
+
 ## `rip-xml.py`
 
 Downloads Elonet HTMLs and rips the inlined XML for any number of
