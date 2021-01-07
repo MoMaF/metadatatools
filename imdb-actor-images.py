@@ -9,6 +9,7 @@ import rdflib
 import rdflib_jsonld
 import re
 from SPARQLWrapper import SPARQLWrapper, JSON
+import requests
 
 #print(rdflib.__version__, rdflib_jsonld.__version__)
 
@@ -21,7 +22,8 @@ def momaf_actor_id(a):
     if a in momaf_actor_id_map:
         return momaf_actor_id_map[a]
 
-    ret = a.replace(' ', '_')
+    # ret = a.replace(' ', '_')
+    ret = 'https://imdb.com/name/'+a+'/'
     q = """
     prefix momaf: <http://momaf-data.utu.fi/>
     SELECT * WHERE {
@@ -63,7 +65,12 @@ def momaf_movie_id(m):
     momaf_movie_id_map[m] = ret
     return ret
 
-respage = open('tt0033798.mediaindex').read()
+if True:
+    url = 'https://imdb.com/title/tt0033798/mediaindex'
+    respage = requests.get(url).text
+else:
+    respage = open('tt0033798.mediaindex').read()
+
 restree = lxml_html.fromstring(respage)
 
 #print(restree)
