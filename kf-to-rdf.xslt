@@ -417,7 +417,7 @@ TODO This gets called in places it is not needed. -->
 In many cases, these produce extra text that has no actual information
 content.-->
   <xsl:template match="ProductionEvent[@elonet-tag='ensiesityspaiva']"/>
-  <xsl:template match="ProductionEvent[@elonet-tag=('ensiesityspaiva','ensiesityspaikat','eloulkomaanmyynti','muuesitys','teatterikopioidenlkm','ulkokuvat','sisakuvat','studiot','yhteistyokumppanit','kuvauspaikkahuomautus')]/ProductionEventType"/>
+  <xsl:template match="ProductionEvent[@elonet-tag=('ensiesityspaiva','ensiesityspaikat','eloulkomaanmyynti','muuesitys','kutsuvierasnäytäntö','teatterikopioidenlkm','ulkokuvat','sisakuvat','studiot','yhteistyokumppanit','kuvauspaikkahuomautus')]/ProductionEventType"/>
   <xsl:template match="ProductionEvent[@elonet-tag=('ensiesityspaiva','ensiesityspaikat','eloulkomaanmyynti','muuesitys','teatterikopioidenlkm','ulkokuvat','sisakuvat','studiot','yhteistyokumppanit','kuvauspaikkahuomautus')]/ProductionEventType" mode="fulldesc" />
 
   <!-- Premieres -->
@@ -433,6 +433,14 @@ content.-->
     <xsl:apply-templates>
       <xsl:with-param name="scrdate" tunnel="yes" select="DateText"/>
       <xsl:with-param name="scrtype" tunnel="yes">http://momaf-data.utu.fi/Screening</xsl:with-param>
+    </xsl:apply-templates>
+  </xsl:template>
+
+  <!-- Private screenings-->
+  <xsl:template match="ProductionEvent[@elonet-tag='kutsuvierasnäytäntö']">
+    <xsl:apply-templates>
+      <xsl:with-param name="scrdate" tunnel="yes" select="DateText"/>
+      <xsl:with-param name="scrtype" tunnel="yes">http://momaf-data.utu.fi/ScreeningPrivate</xsl:with-param>
     </xsl:apply-templates>
   </xsl:template>
 
