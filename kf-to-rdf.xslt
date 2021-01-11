@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- XSLT to transform Elonet metadata to RDF using MoMaF ontology structure.
 
+Harri Kiiskinen for MoMaF project, 2021.
+
+Changes:
+
+Since 0.2:
+- Add PrivateScreening. These were not recognized before and resulted in extra momaf:date fields. Should be compatible.
+-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"
 		xmlns:xs="http://www.w3.org/2001/XMLSchema"
 		xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
