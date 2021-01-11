@@ -7,6 +7,11 @@ Changes:
 
 Since 0.2:
 - Add PrivateScreening. These were not recognized before and resulted in extra momaf:date fields. Should be compatible.
+- Parse durations and lengths properly. Durations are as XSD, lengths are in meters
+- Convert illeage month and day string ("00") to legal ("01")
+- normalize unicode to NFC in select fields. This should be automated for all, but may not be possible
+- remove illegal date 0000-00-00
+- Fix broadcast data: date, place, audience
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"
 		xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -47,6 +52,9 @@ Since 0.2:
     <xsl:text>/</xsl:text>
   </xsl:template>
 
+  <xsl:template match="text()">
+    <xsl:value-of select="normalize-unicode(.)"/>
+  </xsl:template>
   <!-- Mapping from Elonet language terms to ISO two-letter forms.
   -->
   <xsl:variable name="langmap">
@@ -206,9 +214,54 @@ Since 0.2:
   </xsl:variable>
 
   <!-- Function to parse the Elonet date format and return it as XSD compatible -->
-  <xsl:function name="momaf:parsedate" as="xs:string">
+  <xsl:function name="momaf:parsedate">
     <xsl:param name="ds" as="xs:string"/>
-    <xsl:value-of select="string-join(reverse(tokenize($ds,'\.')),'-')"/>
+    <xsl:choose>
+      <xsl:when test="$ds='00.00.0000'"/>
+      <xsl:otherwise>
+	<momaf:date rdf:datatype="http://www.w3.org/2001/XMLSchema#date"><xsl:value-of select="replace(string-join(reverse(tokenize($ds,'\.')),'-'),'-00','-01')"/></momaf:date>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+
+  <xsl:function name="momaf:parselength">
+    <xsl:param name="ds" as="xs:string"/>
+    <xsl:variable name="as" select="replace($ds,' ','')"/>
+    <xsl:analyze-string select="$as" regex="^([0-9]+)m$">
+      <xsl:matching-substring>
+	<momaf:length>
+	  <xsl:value-of select="regex-group(1)"/>
+	</momaf:length>
+      </xsl:matching-substring>
+      <xsl:non-matching-substring>
+	<xsl:analyze-string select="$as" regex="^([0-9]+)min">
+	  <xsl:matching-substring>
+	    <momaf:duration>P<xsl:value-of select="regex-group(1)"/>M</momaf:duration>
+	  </xsl:matching-substring>
+	  <xsl:non-matching-substring>
+	    <xsl:analyze-string select="$as" regex="\D(\d?\d):(\d?\d):(\d?\d)\D">
+	      <xsl:matching-substring>
+		<momaf:duration>P<xsl:value-of select="regex-group(1)"/>H<xsl:value-of select="regex-group(2)"/>M<xsl:value-of select="regex-group(3)"/>S</momaf:duration>
+	      </xsl:matching-substring>
+	      <xsl:non-matching-substring>
+		<xsl:analyze-string select="$as" regex="(\d+)'(\d*)">
+		  <xsl:matching-substring>
+		    <momaf:duration>P<xsl:value-of select="regex-group(1)"/>M<xsl:value-of select="regex-group(2)"/>S</momaf:duration>
+		  </xsl:matching-substring>
+		</xsl:analyze-string>
+	      </xsl:non-matching-substring>
+	    </xsl:analyze-string>
+	  </xsl:non-matching-substring>
+	</xsl:analyze-string>
+      </xsl:non-matching-substring>
+    </xsl:analyze-string>
+  </xsl:function>
+
+  <xsl:function name="momaf:get_first_int">
+    <xsl:param name="ds" as="xs:string"/>
+    <xsl:analyze-string select="replace($ds,' ','')" regex="^\D*(\d+)">
+      <xsl:matching-substring><xsl:value-of select="regex-group(1)"/></xsl:matching-substring>
+    </xsl:analyze-string>
   </xsl:function>
 
   <!-- The Elonet data has three different types of Cinematographic
@@ -350,8 +403,8 @@ Agent in a Media.
 	      <momaf:elonet_group_ID><xsl:value-of select="AgentIdentifier/IDValue/text()"/></momaf:elonet_group_ID>
 	    </xsl:if>
 	    <xsl:if test="not(empty(@elonet-tag))">
-	      <rdfs:label><xsl:value-of select="AgentName"/></rdfs:label>
-	      <skos:prefLabel><xsl:value-of select="AgentName"/></skos:prefLabel>
+	      <rdfs:label><xsl:value-of select="normalize-unicode(AgentName)"/></rdfs:label>
+	      <skos:prefLabel><xsl:value-of select="normalize-unicode(AgentName)"/></skos:prefLabel>
 	    </xsl:if>
 	  </rdf:Description>
 	</momaf:hasAgent>
@@ -378,13 +431,23 @@ Agent in a Media.
       </rdf:Description>
     </momaf:hasBroadcast>
   </xsl:template>
-  <!-- This gets called from within the template above -->
-  <xsl:template match="ProductionEventType[.='BRO']">
-    <xsl:variable name="ds"><xsl:value-of select="@elokuva-elotelevisioesitys-esitysaika"/></xsl:variable>
-    <momaf:date rdf:datatype="http://www.w3.org/2001/XMLSchema#date"><xsl:value-of select="momaf:parsedate($ds)"/></momaf:date>
-    <momaf:broadcastplace><xsl:value-of select="@elokuva-elotelevisioesitys-paikka"/></momaf:broadcastplace>
+  <!-- These three gets called from within the template above -->
+  <xsl:template match="ProductionEventType[.='BRO']/@elokuva-elotelevisioesitys-esitysaika">
+    <xsl:copy-of select="momaf:parsedate(.)"/>
   </xsl:template>
-
+  
+  <xsl:template match="ProductionEventType[.='BRO']/@elokuva-elotelevisioesitys-paikka">
+    <momaf:broadcastplace><xsl:value-of select="."/></momaf:broadcastplace>
+  </xsl:template>
+  <xsl:template match="ProductionEventType[.='BRO']/@elokuva-elotelevisioesitys-katsojamaara">
+    <momaf:audience><xsl:value-of select="momaf:get_first_int(.)"/></momaf:audience>
+  </xsl:template>
+  
+  
+  <xsl:template match="ProductionEventType[.='BRO']">
+    <xsl:apply-templates select="@*"/>
+  </xsl:template>
+  
   <!-- Ratings. Contains technical data related to the actual version rated. -->
   <xsl:template match="ProductionEvent[@elonet-tag='tarkastus']">
     <xsl:param name="elonet_id" tunnel="yes"/>
@@ -396,8 +459,12 @@ Agent in a Media.
       </rdf:Description>
     </momaf:hasClassification>
   </xsl:template>
+  <!-- Specific conversions for classification data -->
+  <xsl:template match="ProductionEventType[.='CEN']/@elokuva-tarkastus-pituus|@elokuva-tarkastus-kesto" priority="2">
+    <xsl:copy-of select="momaf:parselength(.)"/>
+  </xsl:template>
   <!-- Convert various rating data to properties. See classification
-       map above. -->
+       map above. This is the generic conversion. -->
   <xsl:template match="ProductionEventType[.='CEN']/@*">
     <xsl:variable name="type" select="name(.)"/>
     <xsl:variable name="restype" select="$classificationmap/momaf:orig[@key=$type]"/>
@@ -409,14 +476,14 @@ Agent in a Media.
 
 TODO This gets called in places it is not needed. -->
   <xsl:template match="DateText">
-    <momaf:date rdf:datatype="http://www.w3.org/2001/XMLSchema#date"><xsl:value-of select="momaf:parsedate(.)"/></momaf:date>
+    <xsl:copy-of select="momaf:parsedate(.)"/>
   </xsl:template>
 
   <!-- Presentation of the Movie at a festival -->
   <xsl:template match="ProductionEvent[@elonet-tag='elofestivaaliosallistuminen']">
     <momaf:moviefestival rdf:parseType="Resource">
       <rdfs:label><xsl:value-of select="ProductionEventType/@elokuva-elokuvafestivaaliosallistuminen-aihe"/></rdfs:label>
-      <momaf:date rdf:datatype="http://www.w3.org/2001/XMLSchema#gYear"><xsl:value-of select="DateText"/></momaf:date>
+      <momaf:date rdf:datatype="http://www.w3.org/2001/XMLSchema#gYear"><xsl:value-of select="momaf:get_first_int(DateText)"/></momaf:date>
     </momaf:moviefestival>
   </xsl:template>
 
@@ -515,7 +582,8 @@ mean something else.
 
   <!-- Audience in theatres -->
   <xsl:template match="ProductionEvent[@elonet-tag='katsojaluku']/ProductionEventType">
-    <momaf:audience rdf:datatype="http://www.w3.org/2001/XMLSchema#int"><xsl:value-of select="replace(@elokuva-katsojaluku,' ','')"/></momaf:audience>
+    <momaf:audience rdf:datatype="http://www.w3.org/2001/XMLSchema#int"><xsl:value-of select="momaf:get_first_int(replace(@elokuva-katsojaluku,' ',''))"/></momaf:audience>
+    <momaf:audienceNote><xsl:value-of select="@elokuva-katsojaluku"/></momaf:audienceNote>
   </xsl:template>
 
   <!-- Box office earnings
@@ -544,12 +612,12 @@ from the text. -->
 
   <!-- Original subject for film from/by -->
   <xsl:template match="ProductionEvent[@elonet-tag='alkuperaisaihe']/ProductionEventType">
-    <momaf:originalidea><xsl:value-of select="@elokuva-alkuperaisaihe"/></momaf:originalidea>
+    <momaf:originalidea><xsl:value-of select="normalize-unicode(@elokuva-alkuperaisaihe)"/></momaf:originalidea>
   </xsl:template>
 
   <!-- Original work, if adaptation -->
   <xsl:template match="ProductionEvent[@elonet-tag='alkuperaisteos']/ProductionEventType">
-    <momaf:originalwork><xsl:value-of select="@elokuva-alkuperaisteos"/></momaf:originalwork>
+    <momaf:originalwork><xsl:value-of select="normalize-unicode(@elokuva-alkuperaisteos)"/></momaf:originalwork>
   </xsl:template>
 
   <!-- Music. Freetext
@@ -709,10 +777,11 @@ This field contains requests for information aimed at the public using
 Elonet data. -->
   <xsl:template match="ProductionEvent[@elonet-tag=('tiedonkeruu','elotiedonkeruu')]"/>
   <!-- Various technical data -->
+  <xsl:template match="ProductionEvent/ProductionEventType[.='MISC']/@elokuva-alkupkesto|@elokuva-alkuppituus">
+    <xsl:copy-of select="momaf:parselength(.)"/>
+  </xsl:template>
   <xsl:template match="ProductionEvent/ProductionEventType[.='MISC']">
     <momaf:soundsystem><xsl:value-of select="@elokuva-alkupaanijarjestelma"/></momaf:soundsystem>
-    <momaf:duration><xsl:value-of select="@elokuva-alkupkesto"/></momaf:duration>
-    <momaf:length><xsl:value-of select="@elokuva-alkuppituus"/></momaf:length>
     <momaf:color><xsl:value-of select="@elokuva-alkupvari"/></momaf:color>
     <momaf:aspectratio><xsl:value-of select="@elokuva-kuvasuhde"/></momaf:aspectratio>
   </xsl:template>
