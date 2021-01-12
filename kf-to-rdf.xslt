@@ -781,6 +781,7 @@ Elonet data. -->
     <xsl:copy-of select="momaf:parselength(.)"/>
   </xsl:template>
   <xsl:template match="ProductionEvent/ProductionEventType[.='MISC']">
+    <xsl:apply-templates select="@elokuva-alkupkesto|@elokuva-alkuppituus"/>
     <momaf:soundsystem><xsl:value-of select="@elokuva-alkupaanijarjestelma"/></momaf:soundsystem>
     <momaf:color><xsl:value-of select="@elokuva-alkupvari"/></momaf:color>
     <momaf:aspectratio><xsl:value-of select="@elokuva-kuvasuhde"/></momaf:aspectratio>
