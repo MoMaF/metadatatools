@@ -12,7 +12,8 @@
     <owl:Ontology rdf:about="http://momaf-data.utu.fi/">
         <rdfs:comment>Changes for 0.3:
 
-- Added data property IMDb_ID</rdfs:comment>
+- Added data property IMDb_ID
+- Removed Movie as domain from data properties &apos;duration&apos; and &apos;length&apos; because these are also used in Classification instances.</rdfs:comment>
         <rdfs:comment>ontology has been originally created in order to store and process the Elonet movie metadata from the National Audiovisual Institute of Finland.</rdfs:comment>
         <rdfs:label>Ontology for MoMaF project</rdfs:label>
         <owl:versionInfo>v. 0.3pre</owl:versionInfo>
@@ -465,9 +466,7 @@
 
     <!-- http://momaf-data.utu.fi/duration -->
 
-    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/duration">
-        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
-    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/duration"/>
     
 
 
@@ -580,9 +579,7 @@
 
     <!-- http://momaf-data.utu.fi/length -->
 
-    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/length">
-        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
-    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/length"/>
     
 
 
