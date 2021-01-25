@@ -76,10 +76,10 @@ This is not a complete tool, but a demonstration of how to get data out of the t
 ```bash
 ./kavi-download
 ./xml2rdf.py *.xml > all.ttl
-sparql --data=all.ttl --query=../sparql/momaf-films.sq
-sparql --data=all.ttl --query=../sparql/actors-top-100.sq
-sparql --data=all.ttl --query=../sparql/tuntematon-sotilas-1955-roles.sq
-sparql --data=all.ttl --query=../sparql/wikidata-of-momaf-films.sq
+sparql --data=all.ttl --query=../sparql/momaf-films.rq
+sparql --data=all.ttl --query=../sparql/actors-top-100.rq
+sparql --data=all.ttl --query=../sparql/tuntematon-sotilas-1955-roles.rq
+sparql --data=all.ttl --query=../sparql/wikidata-of-momaf-films.rq
 ```
 
 ### Converting Elonet XML to RDF
@@ -102,13 +102,13 @@ Explanations:
 ## HTML output
 
 ```bash
-sparql --data=all.ttl --query=../sparql/wikidata-of-momaf-films.sq --results=xml > tmp.xml
+sparql --data=all.ttl --query=../sparql/wikidata-of-momaf-films.rq --results=xml > tmp.xml
 xmlstarlet tr ../sparql/xml-to-html-momaf.xsl tmp.xml > wikidata-of-momaf-films.html
 
-sparql --data=all.ttl --query=../sparql/metadata-links-of-momaf-films.sq --results=xml > tmp.xml
+sparql --data=all.ttl --query=../sparql/metadata-links-of-momaf-films.rq --results=xml > tmp.xml
 xmlstarlet tr ../sparql/xml-to-html-momaf.xsl tmp.xml > metadata-links-of-momaf-films.html
 
-sparql --data=all.ttl --query=../sparql/metadata-links-of-momaf-actors.sq --results=xml > tmp.xml
-xmlstarlet tr ../sparql/xml-to-html-momaf.xsl tmp.xml > metadata-links-of-momaf-actors.html
+sparql --data=all.ttl --query=../sparql/metadata-links-of-momaf-actors.rq --results=xml > tmp.xml
+xmlstarlet tr ../sparql/xml-to-html-momaf.xsl tmp.xml | sed 's/&amp;/\&/g' > metadata-links-of-momaf-actors.html
 ```
 
