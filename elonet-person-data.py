@@ -9,26 +9,36 @@ from rdflib.namespace import XSD, RDF
 import datetime
 import math
 import sys
+import re
 
 g = rdflib.Graph()
 
 momaf = rdflib.Namespace("http://momaf-data.utu.fi/")
 g.bind("momaf",momaf)
 
-propmap = {'Syntymäaika':momaf.bdate,
+propmap = {'Syntymäaika':momaf.bdatestring,
            'Syntymäpaikka':momaf.bplace,
-           'Kuolinaika':momaf.ddate,
+           'Kuolinaika':momaf.ddatestring,
            'Kuolinpaikka':momaf.dplace
            }
 
-def parsedate (d):
+# Too complicated. Will have to be done with the final data later.
+def parsedate (d1):
+    #d2 = d1.replace("00.00.","")
+    d2 = re.sub(r'(\D*)(00)(\.)',r'\1\3',d1)
+    d = re.sub(r'(.*\d{4})(00)(.*)',r'\1\3',d2)
     try:
         tm = datetime.datetime.strptime(d,'%d.%m.%Y')
     except ValueError:
         try:
-            tm = datetime.datetime.strptime(d,'%Y')
+            tm = datetime.datetime.strptime(d,'%d.%m.%y')
+            if tm.year>2000:
+                tm = tm.replace(year=tm.year-100)
         except ValueError:
-            tm = datetime.datetime.strptime(d,'..%Y')
+            try:
+                tm = datetime.datetime.strptime(d,'%Y')
+            except ValueError:
+                tm = datetime.datetime.strptime(d,'..%Y')
     return tm.date()
 
 def parseelonetpage(res,g):
@@ -43,10 +53,12 @@ def parseelonetpage(res,g):
         for n in propmap.keys():
             bd = tbi.xpath("tr/th[contains(.,'"+n+"')]/../td/text()")
             if len(bd)>0:
-                if (propmap[n]==momaf.bdate or propmap[n]==momaf.ddate):
-                    g.add((subject,propmap[n],rdflib.Literal(parsedate(bd[0]),datatype=XSD.date)))
-                else:
-                    g.add((subject,propmap[n],rdflib.Literal(bd[0])))
+                # This is for setting the datatype for dates. Requires a date parser,
+                # which is complicated, because original data is so BAD! See "parsedate" above.
+                #    if (propmap[n]==momaf.bdate or propmap[n]==momaf.ddate):
+                #        g.add((subject,propmap[n],rdflib.Literal(parsedate(bd[0]),datatype=XSD.date)))
+                #    else:
+                g.add((subject,propmap[n],rdflib.Literal(bd[0])))
     sums = root.xpath('//div[contains(@class,"recordSummary")]/p[not(@class)]')
     for sum1 in sums:
         g.add((subject,momaf.summary,rdflib.Literal(lxml.etree.tostring(sum1,encoding="UTF-8").decode(),datatype=RDF.HTML)))
