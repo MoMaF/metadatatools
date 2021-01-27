@@ -26,6 +26,30 @@ inferences based on the data.
 
 This file can offer insights as to how metadata is organized.
 
+## `elonet-person-data.py`
+
+This script first collects all production members for the national filmography movies, using the MoMaF sparql endpoint at https://momaf-data.utu.fi:3034/momaf-raw/sparql . It then reads through the Elonet person pages that are accessible at URL http://elonet.fi/fi/henkilo/[elonet_person_id], parses the HTML and gathers information about birth and death as well as the occasionally longish textual descriptions for the person in question. This information is converted to RDF according to the MoMaF ontology, and the data is output as Turtle to the standard output.
+
+The properties the produced data uses are:
+- `bdatestring`: Birthdate as string. Should be encoded as XML schema Date, datatype xsd:date, but this requires a complex parser, for the original data is so bad. Easier to update the data later on.
+- `bplace`: Birth place, as string
+- `ddatestring`: Date of death as string. See commend for `bdatestring` about what should be done later.
+- `dplace`: Death place, as string
+- `summary`: Summary or textual description, as datatype rdf:HTML
+
+The script takes a long time to run, several hours, because it reads each person page from the Elonet database.
+
+There are no options for the script. Redirect standard output to a file to store the data. The script outputs a percentage of the current stage to standard error.
+
+## `elonet-person-data-clean.py`
+
+This script cleans the data produced by `elonet-person-data.py`. It parses the date fields for correct dates and adds two fields to the dataset:
+
+- `bdate`: Birthdate as XSD:Date
+- `date`: Date of death as XSD:Date
+
+Should be run on the data file output by `elonet-person-data.py`.
+
 ## `rip-xml.py`
 
 Downloads Elonet HTMLs and rips the inlined XML for any number of
