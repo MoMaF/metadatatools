@@ -3,3 +3,5 @@ rdflib_jsonld
 pandas
 lxml
 SPARQLWrapper
+rdflib_jsonld
+requests
