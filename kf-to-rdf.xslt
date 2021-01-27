@@ -12,6 +12,7 @@ Since 0.2:
 - normalize unicode to NFC in select fields. This should be automated for all, but may not be possible
 - remove illegal date 0000-00-00
 - Fix broadcast data: date, place, audience
+- add datatype declarations to durations
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"
 		xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -219,7 +220,7 @@ Since 0.2:
     <xsl:choose>
       <xsl:when test="$ds='00.00.0000'"/>
       <xsl:otherwise>
-	<momaf:date rdf:datatype="http://www.w3.org/2001/XMLSchema#date"><xsl:value-of select="replace(string-join(reverse(tokenize($ds,'\.')),'-'),'-00','-01')"/></momaf:date>
+	<momaf:date rdf:datatype="xs:date"><xsl:value-of select="replace(string-join(reverse(tokenize($ds,'\.')),'-'),'-00','-01')"/></momaf:date>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:function>
@@ -236,17 +237,17 @@ Since 0.2:
       <xsl:non-matching-substring>
 	<xsl:analyze-string select="$as" regex="^([0-9]+)min">
 	  <xsl:matching-substring>
-	    <momaf:duration>P<xsl:value-of select="regex-group(1)"/>M</momaf:duration>
+	    <momaf:duration rdf:datatype="xs:duration">PT<xsl:value-of select="regex-group(1)"/>M</momaf:duration>
 	  </xsl:matching-substring>
 	  <xsl:non-matching-substring>
 	    <xsl:analyze-string select="$as" regex="\D(\d?\d):(\d?\d):(\d?\d)\D">
 	      <xsl:matching-substring>
-		<momaf:duration>P<xsl:value-of select="regex-group(1)"/>H<xsl:value-of select="regex-group(2)"/>M<xsl:value-of select="regex-group(3)"/>S</momaf:duration>
+		<momaf:duration rdf:datatype="xs:duration">PT<xsl:value-of select="regex-group(1)"/>H<xsl:value-of select="regex-group(2)"/>M<xsl:value-of select="regex-group(3)"/>S</momaf:duration>
 	      </xsl:matching-substring>
 	      <xsl:non-matching-substring>
 		<xsl:analyze-string select="$as" regex="(\d+)'(\d*)">
 		  <xsl:matching-substring>
-		    <momaf:duration>P<xsl:value-of select="regex-group(1)"/>M<xsl:value-of select="regex-group(2)"/>S</momaf:duration>
+		    <momaf:duration rdf:datatype="xs:duration">PT<xsl:value-of select="regex-group(1)"/>M<xsl:value-of select="regex-group(2)"/>S</momaf:duration>
 		  </xsl:matching-substring>
 		</xsl:analyze-string>
 	      </xsl:non-matching-substring>
@@ -483,7 +484,7 @@ TODO This gets called in places it is not needed. -->
   <xsl:template match="ProductionEvent[@elonet-tag='elofestivaaliosallistuminen']">
     <momaf:moviefestival rdf:parseType="Resource">
       <rdfs:label><xsl:value-of select="ProductionEventType/@elokuva-elokuvafestivaaliosallistuminen-aihe"/></rdfs:label>
-      <momaf:date rdf:datatype="http://www.w3.org/2001/XMLSchema#gYear"><xsl:value-of select="momaf:get_first_int(DateText)"/></momaf:date>
+      <momaf:date rdf:datatype="xs:gYear"><xsl:value-of select="momaf:get_first_int(DateText)"/></momaf:date>
     </momaf:moviefestival>
   </xsl:template>
 
@@ -582,7 +583,7 @@ mean something else.
 
   <!-- Audience in theatres -->
   <xsl:template match="ProductionEvent[@elonet-tag='katsojaluku']/ProductionEventType">
-    <momaf:audience rdf:datatype="http://www.w3.org/2001/XMLSchema#int"><xsl:value-of select="momaf:get_first_int(replace(@elokuva-katsojaluku,' ',''))"/></momaf:audience>
+    <momaf:audience rdf:datatype="xs:int"><xsl:value-of select="momaf:get_first_int(replace(@elokuva-katsojaluku,' ',''))"/></momaf:audience>
     <momaf:audienceNote><xsl:value-of select="@elokuva-katsojaluku"/></momaf:audienceNote>
   </xsl:template>
 

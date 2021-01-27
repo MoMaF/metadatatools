@@ -7,9 +7,9 @@ import xml.etree.ElementTree as ET
 import html
 from lxml import html as lxml_html
 
-description=r"""Read list of films from the National Filmography
+description=r"""Read list of films and the XML data files from the National Filmography
 
-Parses the elonet.finna.fi -rss feed and collects all film URL:s that refer to the Elonet database.
+Parses the elonet.finna.fi -rss feed and collects all film URL:s and respective XML data dumps that refer to the Elonet database.
 
 With relevant option, the list of url's is printed to file 'kf-filmurls.txt'
 """
