@@ -37,7 +37,7 @@ The properties the produced data uses are:
 - `dplace`: Death place, as string
 - `summary`: Summary or textual description, as datatype rdf:HTML
 
-The script takes a long time to run, often some hours, because it reads each person page from the Elonet database.
+The script takes a long time to run, several hours, because it reads each person page from the Elonet database.
 
 There are no options for the script. Redirect standard output to a file to store the data. The script outputs a percentage of the current stage to standard error.
 
