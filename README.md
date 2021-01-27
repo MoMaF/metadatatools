@@ -41,6 +41,15 @@ The script takes a long time to run, several hours, because it reads each person
 
 There are no options for the script. Redirect standard output to a file to store the data. The script outputs a percentage of the current stage to standard error.
 
+## `elonet-person-data-clean.py`
+
+This script cleans the data produced by `elonet-person-data.py`. It parses the date fields for correct dates and adds two fields to the dataset:
+
+- `bdate`: Birthdate as XSD:Date
+- `date`: Date of death as XSD:Date
+
+Should be run on the data file output by `elonet-person-data.py`.
+
 ## `rip-xml.py`
 
 Downloads Elonet HTMLs and rips the inlined XML for any number of

@@ -22,24 +22,6 @@ propmap = {'Syntymäaika':momaf.bdatestring,
            'Kuolinpaikka':momaf.dplace
            }
 
-# Too complicated. Will have to be done with the final data later.
-def parsedate (d1):
-    #d2 = d1.replace("00.00.","")
-    d2 = re.sub(r'(\D*)(00)(\.)',r'\1\3',d1)
-    d = re.sub(r'(.*\d{4})(00)(.*)',r'\1\3',d2)
-    try:
-        tm = datetime.datetime.strptime(d,'%d.%m.%Y')
-    except ValueError:
-        try:
-            tm = datetime.datetime.strptime(d,'%d.%m.%y')
-            if tm.year>2000:
-                tm = tm.replace(year=tm.year-100)
-        except ValueError:
-            try:
-                tm = datetime.datetime.strptime(d,'%Y')
-            except ValueError:
-                tm = datetime.datetime.strptime(d,'..%Y')
-    return tm.date()
 
 def parseelonetpage(res,g):
     """Parse elonet page, take info from person id. First argument is query result, second is the graph"""
