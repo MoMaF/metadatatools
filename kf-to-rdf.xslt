@@ -453,7 +453,7 @@ Agent in a Media.
   <xsl:template match="ProductionEvent[@elonet-tag='tarkastus']">
     <xsl:param name="elonet_id" tunnel="yes"/>
     <momaf:hasClassification>
-      <xsl:variable name="classificationid"><xsl:value-of select="$elonet_id"/>_<xsl:value-of select="momaf:parsedate(DateText/text())"/></xsl:variable>
+      <xsl:variable name="classificationid"><xsl:value-of select="$elonet_id"/>_<xsl:value-of select="momaf:parsedate(DateText/text())"/>_<xsl:value-of select="ProductionEventType/@elokuva-tarkastus-formaatti"/></xsl:variable>
       <rdf:Description rdf:about="http://momaf-data.utu.fi/classification#{encode-for-uri($classificationid)}">
 	<rdf:type rdf:resource="http://momaf-data.utu.fi/Classification"/>
 	<xsl:apply-templates select="node()|node()/@*"/>
