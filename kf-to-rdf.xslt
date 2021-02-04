@@ -26,7 +26,6 @@ Since 0.2:
 		xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
 		xmlns:elonet-film="https://elonet.finna.fi/Record/kavi."
 		xmlns:elonet-kuva="http://www.elonet.fi/tenho/media"
-		xmlns:elonetagent="https://elonet.finna.fi/Search/Results?filter[]=author2_id_str_mv:kavi."
 		xmlns:skos="http://www.w3.org/2004/02/skos/core#"
 		xmlns="http://www.w3.org/1999/xhtml/">
   <xsl:output method="xml" indent="yes"/>
@@ -625,7 +624,7 @@ from the text. -->
 
 TODO This could be improved by parsing the string for more details. -->
   <xsl:template match="ProductionEvent[@elonet-tag='musiikki']">
-    <momaf:music><xsl:apply-templates select="elokuva_musiikki"/></momaf:music>
+    <momaf:music rdf:datatype="rdf:HTML"><xsl:apply-templates select="elokuva_musiikki"/></momaf:music>
   </xsl:template>
 
   <!-- Film type -->
@@ -704,7 +703,7 @@ This tries really hard to find sensible place names and scene locations from the
     <momaf:hasFilmingLocationFullDescription>
       <rdf:Description>
 	<rdf:type rdf:resource="{$elnamefulldesc}"/>
-	<rdfs:comment xml:lang="fi">
+	<rdfs:comment xml:lang="fi" rdf:datatype="rdf:HTML">
 	  <xsl:value-of select="$ins2"/>
 	</rdfs:comment>
       </rdf:Description>
@@ -807,21 +806,21 @@ TODO Check if this is really so. -->
 
   <!-- Review samples -->
   <xsl:template match="ProductionEvent[@elonet-tag='lehdistoarvio']">
-    <momaf:hasReview>
+    <momaf:hasReview rdf:datatype="rdf:HTML">
       <xsl:apply-templates select="elokuva_lehdistoarvio"/>
     </momaf:hasReview>
   </xsl:template>
 
   <!-- Commentary -->
   <xsl:template match="ProductionEvent[@elonet-tag='huomautukset']">
-    <momaf:hasCommentary>
+    <momaf:hasCommentary rdf:datatype="rdf:HTML">
       <xsl:apply-templates select="elokuva_huomautukset"/>
     </momaf:hasCommentary>
   </xsl:template>
 
   <!-- Synopsis -->
   <xsl:template match="ContentDescription[DescriptionType='Synopsis']">
-    <momaf:hasSynopsis>
+    <momaf:hasSynopsis rdf:datatype="rdf:HTML">
       <xsl:attribute name="xml:lang"><xsl:apply-templates select="Language"/></xsl:attribute>
       <xsl:value-of select="DescriptionText"/>
     </momaf:hasSynopsis>
@@ -829,7 +828,7 @@ TODO Check if this is really so. -->
 
   <!-- Content description -->
   <xsl:template match="ContentDescription[DescriptionType='Content description']">
-    <momaf:hasContentDescription>
+    <momaf:hasContentDescription rdf:datatype="rdf:HTML">
       <xsl:attribute name="xml:lang"><xsl:apply-templates select="Language"/></xsl:attribute>
       <xsl:value-of select="DescriptionText"/>
     </momaf:hasContentDescription>
