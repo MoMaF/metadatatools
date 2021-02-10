@@ -425,7 +425,7 @@ Agent in a Media.
     <xsl:param name="elonet_id" tunnel="yes"/>
     <xsl:variable name="brid"><xsl:value-of select="$elonet_id"/>_<xsl:value-of select="ProductionEventType/@elokuva-elotelevisioesitys-esitysaika"/>_<xsl:value-of select="ProductionEventType/@elokuva-elotelevisioesitys-paikka"/></xsl:variable>
     <momaf:hasBroadcast>
-      <rdf:Description rdf:about="http://momaf-data.utu.fi/broadcast#{encode-for-uri($brid)}">
+      <rdf:Description rdf:about="http://momaf-data.utu.fi/broadcast_{encode-for-uri($brid)}">
 	<rdf:type rdf:resource="http://momaf-data.utu.fi/Broadcast"/>
 	<xsl:apply-templates/>
       </rdf:Description>
@@ -453,7 +453,7 @@ Agent in a Media.
     <xsl:param name="elonet_id" tunnel="yes"/>
     <momaf:hasClassification>
       <xsl:variable name="classificationid"><xsl:value-of select="$elonet_id"/>_<xsl:value-of select="momaf:parsedate(DateText/text())"/>_<xsl:value-of select="ProductionEventType/@elokuva-tarkastus-formaatti"/></xsl:variable>
-      <rdf:Description rdf:about="http://momaf-data.utu.fi/classification#{encode-for-uri($classificationid)}">
+      <rdf:Description rdf:about="http://momaf-data.utu.fi/classification_{encode-for-uri($classificationid)}">
 	<rdf:type rdf:resource="http://momaf-data.utu.fi/Classification"/>
 	<xsl:apply-templates select="node()|node()/@*"/>
       </rdf:Description>
@@ -483,7 +483,7 @@ TODO This gets called in places it is not needed. -->
   <xsl:template match="ProductionEvent[@elonet-tag='elofestivaaliosallistuminen']">
     <momaf:moviefestival rdf:parseType="Resource">
       <rdf:type rdf:resource="http://momaf-data.utu.fi/Festival"/>
-      <rdfs:label><xsl:value-of select="ProductionEventType/@elokuva-elokuvafestivaaliosallistuminen-aihe"/></rdfs:label>
+      <rdfs:label><xsl:value-of select="ProductionEventType/@elokuva-elofestivaaliosallistuminen-aihe"/><xsl:text>, </xsl:text><xsl:value-of select="Region/RegionName"/></rdfs:label>
       <momaf:date rdf:datatype="xs:gYear"><xsl:value-of select="momaf:get_first_int(DateText)"/></momaf:date>
     </momaf:moviefestival>
   </xsl:template>
@@ -556,10 +556,10 @@ mean something else.
 		  <!-- Add node for theatre as named node. Individual
 		       theaters can be analyzed. -->
 		  <xsl:variable name="theatreid"><xsl:value-of select="."/>_<xsl:value-of select="$city"/></xsl:variable>
-		  <rdf:Description rdf:about="http://momaf-data.utu.fi/theatre#{encode-for-uri($theatreid)}">
+		  <rdf:Description rdf:about="http://momaf-data.utu.fi/theatre_{encode-for-uri($theatreid)}">
 		    <rdf:type rdf:resource="http://momaf-data.utu.fi/Theatre"/>
 		    <rdfs:label><xsl:value-of select="."/></rdfs:label>
-		    <momaf:hasAdminplace rdf:resource="http://momaf-data.utu.fi/adminplace#{encode-for-uri($city)}"/>
+		    <momaf:hasAdminplace rdf:resource="http://momaf-data.utu.fi/adminplace_{encode-for-uri($city)}"/>
 		  </rdf:Description>
 		</momaf:atTheatre>
 	      </rdf:Description>
@@ -716,7 +716,7 @@ This tries really hard to find sensible place names and scene locations from the
     <xsl:analyze-string select="." regex="^(.*): ">
       <xsl:matching-substring>
 	<momaf:hasAdminplace>
-	  <rdf:Description rdf:about="http://momaf-data.utu.fi/adminplace#{encode-for-uri(regex-group(1))}">
+	  <rdf:Description rdf:about="http://momaf-data.utu.fi/adminplace_{encode-for-uri(regex-group(1))}">
 	    <rdf:type rdf:resource="http://momaf-data.utu.fi/Adminplace"/>
 	    <rdfs:label xml:lang="fi"><xsl:value-of select="regex-group(1)"/></rdfs:label>
 	    <skos:prefLabel><xsl:value-of select="regex-group(1)"/></skos:prefLabel>
