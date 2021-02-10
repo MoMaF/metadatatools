@@ -482,6 +482,7 @@ TODO This gets called in places it is not needed. -->
   <!-- Presentation of the Movie at a festival -->
   <xsl:template match="ProductionEvent[@elonet-tag='elofestivaaliosallistuminen']">
     <momaf:moviefestival rdf:parseType="Resource">
+      <rdf:type rdf:resource="http://momaf-data.utu.fi/Festival"/>
       <rdfs:label><xsl:value-of select="ProductionEventType/@elokuva-elokuvafestivaaliosallistuminen-aihe"/></rdfs:label>
       <momaf:date rdf:datatype="xs:gYear"><xsl:value-of select="momaf:get_first_int(DateText)"/></momaf:date>
     </momaf:moviefestival>
