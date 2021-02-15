@@ -24,7 +24,6 @@ Since 0.2:
 		xmlns:momafadminplace="http://momaf-data.utu.fi/adminplace#"
 		xmlns:dc="http://purl.org/dc/elements/1.1/"
 		xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-		xmlns:elonet-film="https://elonet.finna.fi/Record/kavi."
 		xmlns:elonet-kuva="http://www.elonet.fi/tenho/media"
 		xmlns:skos="http://www.w3.org/2004/02/skos/core#"
 		xmlns="http://www.w3.org/1999/xhtml/">
