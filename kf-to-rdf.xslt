@@ -403,8 +403,14 @@ Agent in a Media.
 	      <momaf:elonet_group_ID><xsl:value-of select="AgentIdentifier/IDValue/text()"/></momaf:elonet_group_ID>
 	    </xsl:if>
 	    <xsl:if test="not(empty(@elonet-tag))">
-	      <rdfs:label><xsl:value-of select="normalize-unicode(AgentName)"/></rdfs:label>
-	      <skos:prefLabel><xsl:value-of select="normalize-unicode(AgentName)"/></skos:prefLabel>
+	      <xsl:choose>
+		<xsl:when test="AgentName[@*[ends-with(name(),'nimityyppi')]='taiteilijanimi']">
+		  <rdfs:label><xsl:value-of select="normalize-unicode(AgentName)"/></rdfs:label>
+		</xsl:when>
+		<xsl:otherwise>
+		  <skos:prefLabel><xsl:value-of select="normalize-unicode(AgentName)"/></skos:prefLabel>
+		</xsl:otherwise>
+	      </xsl:choose>
 	    </xsl:if>
 	  </rdf:Description>
 	</momaf:hasAgent>
