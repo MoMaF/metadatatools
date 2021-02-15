@@ -403,7 +403,7 @@ Agent in a Media.
 	    </xsl:if>
 	    <xsl:if test="not(empty(@elonet-tag))">
 	      <xsl:choose>
-		<xsl:when test="AgentName[@*[ends-with(name(),'nimityyppi')]='taiteilijanimi']">
+		<xsl:when test="AgentName[@*[ends-with(name(),'nimityyppi')]=('taiteilijanimi','muu nimi','rinnakkaisnimi') or @*[starts-with(name(),'elokuva-elokreditoimaton')]]">
 		  <rdfs:label><xsl:value-of select="normalize-unicode(AgentName)"/></rdfs:label>
 		</xsl:when>
 		<xsl:otherwise>
