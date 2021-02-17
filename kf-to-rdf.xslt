@@ -699,15 +699,17 @@ This tries really hard to find sensible place names and scene locations from the
 	</xsl:for-each-group>
     </xsl:for-each-group>
   </xsl:template>
-  <!-- This is the second parsing of filming locations. 
+  <!-- This is the second parsing of filming locations. This collects the original full text descriptions. 
   -->
   <xsl:template match="elokuva_ulkokuvat|elokuva_sisakuvat|elokuva_studiot" mode="fulldesc">
+    <xsl:param name="elonet_id" tunnel="yes"/>
     <xsl:variable name="tp" select="name()"/>
     <xsl:variable name="elname">http://momaf-data.utu.fi/<xsl:value-of select="$locmap/momaf:orig[@key=$tp]"/></xsl:variable>
     <xsl:variable name="ins2"><xsl:copy-of select="."/></xsl:variable>
     <xsl:variable name="elnamefulldesc"><xsl:value-of select="$elname"/>Fulldescription</xsl:variable>
+    <xsl:variable name="entityname">http://momaf-data.utu.fi/<xsl:value-of select="$elonet_id"/>_<xsl:value-of select="$locmap/momaf:orig[@key=$tp]"/>Fulldescription</xsl:variable>
     <momaf:hasFilmingLocationFullDescription>
-      <rdf:Description>
+      <rdf:Description rdf:about="{$entityname}">
 	<rdf:type rdf:resource="{$elnamefulldesc}"/>
 	<rdfs:comment xml:lang="fi" rdf:datatype="rdf:HTML">
 	  <xsl:value-of select="$ins2"/>
