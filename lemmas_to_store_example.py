@@ -17,11 +17,15 @@ USERVICE = "https://momaf-data.utu.fi:3034/momaf-raw/update"
 USERNAME = "updater"
 PASSWORD = "***secret***"
 
-RESULTGRAPH = "http://momaf-data.utu.fi/lemmatized_filming_locations"
+RESULTGRAPH = "http://momaf-data.utu.fi/lemmatized_texts"
 
 
 """
-The following works for testing, but to get all data, remove the limit at the end
+The following works for testing, but to get all data, remove the limit at the end.
+
+
+The query finds all nodes that have the data property 'text' and returns the content of that text.
+
 """
 
 DATAQUERY = """PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -30,9 +34,8 @@ PREFIX text: <http://jena.apache.org/text#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 prefix momaf:  <http://momaf-data.utu.fi/>
 
-select ?d ?content where {
-  ?f a momaf:Movie; momaf:hasFilmingLocationFullDescription ?d .
-  ?d rdfs:comment ?content .
+select ?id ?content where {
+  ?id momaf:text ?content .
 } limit 15
 """
 
