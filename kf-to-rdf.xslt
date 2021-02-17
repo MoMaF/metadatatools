@@ -708,14 +708,14 @@ This tries really hard to find sensible place names and scene locations from the
     <xsl:variable name="ins2"><xsl:copy-of select="."/></xsl:variable>
     <xsl:variable name="elnamefulldesc"><xsl:value-of select="$elname"/>Fulldescription</xsl:variable>
     <xsl:variable name="entityname">http://momaf-data.utu.fi/<xsl:value-of select="$elonet_id"/>_<xsl:value-of select="$locmap/momaf:orig[@key=$tp]"/>Fulldescription</xsl:variable>
-    <momaf:hasFilmingLocationFullDescription>
+    <momaf:hasText>
       <rdf:Description rdf:about="{$entityname}">
 	<rdf:type rdf:resource="{$elnamefulldesc}"/>
-	<rdfs:comment xml:lang="fi" rdf:datatype="rdf:HTML">
+	<momaf:text xml:lang="fi" rdf:datatype="rdf:HTML">
 	  <xsl:value-of select="$ins2"/>
-	</rdfs:comment>
+	</momaf:text>
       </rdf:Description>
-    </momaf:hasFilmingLocationFullDescription>
+    </momaf:hasText>
   </xsl:template>
   <!-- "adminplace" in this terminology refers to an administrative
        name of a place: a town, city, country, etc. -->
@@ -814,32 +814,72 @@ TODO Check if this is really so. -->
 
   <!-- Review samples -->
   <xsl:template match="ProductionEvent[@elonet-tag='lehdistoarvio']">
+    <xsl:param name="elonet_id" tunnel="yes"/>
+    <xsl:variable name="entityname">http://momaf-data.utu.fi/<xsl:value-of select="$elonet_id"/>_Review</xsl:variable>
     <momaf:hasReview rdf:datatype="rdf:HTML">
       <xsl:apply-templates select="elokuva_lehdistoarvio"/>
     </momaf:hasReview>
+    <momaf:hasText>
+      <rdf:Description rdf:about="{$entityname}">
+	<rdf:type rdf:resource="http://momaf-data.utu.fi/Review"/>
+	<momaf:text xml:lang="fi" rdf:datatype="rdf:HTML">
+	  <xsl:apply-templates select="elokuva_lehdistoarvio"/>
+	</momaf:text>
+      </rdf:Description>
+    </momaf:hasText>
   </xsl:template>
 
   <!-- Commentary -->
   <xsl:template match="ProductionEvent[@elonet-tag='huomautukset']">
+    <xsl:param name="elonet_id" tunnel="yes"/>
+    <xsl:variable name="entityname">http://momaf-data.utu.fi/<xsl:value-of select="$elonet_id"/>_Commentary</xsl:variable>
     <momaf:hasCommentary rdf:datatype="rdf:HTML">
       <xsl:apply-templates select="elokuva_huomautukset"/>
     </momaf:hasCommentary>
+    <momaf:hasText>
+      <rdf:Description rdf:about="{$entityname}">
+	<rdf:type rdf:resource="http://momaf-data.utu.fi/Commentary"/>
+	<momaf:text xml:lang="fi" rdf:datatype="rdf:HTML">
+	  <xsl:apply-templates select="elokuva_huomautukset"/>
+	</momaf:text>
+      </rdf:Description>
+    </momaf:hasText>
   </xsl:template>
 
   <!-- Synopsis -->
   <xsl:template match="ContentDescription[DescriptionType='Synopsis']">
+    <xsl:param name="elonet_id" tunnel="yes"/>
+    <xsl:variable name="entityname">http://momaf-data.utu.fi/<xsl:value-of select="$elonet_id"/>_Synopsis</xsl:variable>
     <momaf:hasSynopsis rdf:datatype="rdf:HTML">
       <xsl:attribute name="xml:lang"><xsl:apply-templates select="Language"/></xsl:attribute>
       <xsl:value-of select="DescriptionText"/>
     </momaf:hasSynopsis>
+    <momaf:hasText>
+      <rdf:Description rdf:about="{$entityname}">
+	<rdf:type rdf:resource="http://momaf-data.utu.fi/Synopsis"/>
+	<momaf:text xml:lang="fi" rdf:datatype="rdf:HTML">
+	  <xsl:value-of select="DescriptionText"/>
+	</momaf:text>
+      </rdf:Description>
+    </momaf:hasText>
   </xsl:template>
 
   <!-- Content description -->
   <xsl:template match="ContentDescription[DescriptionType='Content description']">
+    <xsl:param name="elonet_id" tunnel="yes"/>
+    <xsl:variable name="entityname">http://momaf-data.utu.fi/<xsl:value-of select="$elonet_id"/>_ContentDescription</xsl:variable>
     <momaf:hasContentDescription rdf:datatype="rdf:HTML">
       <xsl:attribute name="xml:lang"><xsl:apply-templates select="Language"/></xsl:attribute>
       <xsl:value-of select="DescriptionText"/>
     </momaf:hasContentDescription>
+    <momaf:hasText>
+      <rdf:Description rdf:about="{$entityname}">
+	<rdf:type rdf:resource="http://momaf-data.utu.fi/ContentDescription"/>
+	<momaf:text xml:lang="fi" rdf:datatype="rdf:HTML">
+	  <xsl:value-of select="DescriptionText"/>
+	</momaf:text>
+      </rdf:Description>
+    </momaf:hasText>
   </xsl:template>
 
     <!-- Content description language, see thempate above -->
