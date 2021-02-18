@@ -84,7 +84,7 @@ contents of Synopsis, Content description and Review for all movies.
 Uses SPARQLWrapper, from https://rdflib.dev/sparqlwrapper/ 
 
 This is not a complete tool but a demonstration of how to get data
-from the triple store to Python as JSON.
+from the triple store to Python as JSON.lemmas_to_store_example.py
 
 ## `sparql_get_person_image_links.py`
 
@@ -94,6 +94,11 @@ The same applies for `filmname`and `filmID`; for example, search for name "Seits
 
 This is not a complete tool, but a demonstration of how to get data out of the triple store.
 
+## `lemmas_to_store_example.py`
+
+Shows how to update data at the triple store. Password provided on a need-to-have basis on request.
+
+Graph name is important, while it keeps your dataset coherent. Links work between graphs, so one graph can only contain the data that is needed.
 
 ## examples
 
