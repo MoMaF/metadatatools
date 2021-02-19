@@ -173,6 +173,15 @@
     
 
 
+    <!-- http://momaf-data.utu.fi/hasNamedEntityType -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/hasNamedEntityType">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/NamedEntity"/>
+        <rdfs:range rdf:resource="http://momaf-data.utu.fi/NamedEntityType"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://momaf-data.utu.fi/hasScreening -->
 
     <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/hasScreening">
@@ -225,6 +234,15 @@
     <!-- http://momaf-data.utu.fi/isScreeningOf -->
 
     <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/isScreeningOf"/>
+    
+
+
+    <!-- http://momaf-data.utu.fi/mentionsNamedEntity -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/mentionsNamedEntity">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Text"/>
+        <rdfs:range rdf:resource="http://momaf-data.utu.fi/NamedEntity"/>
+    </owl:ObjectProperty>
     
 
 
@@ -1375,6 +1393,20 @@
         <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Musician"/>
         <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
         <rdfs:label xml:lang="fi">muusikko, kreditoimaton</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/NamedEntity -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/NamedEntity"/>
+    
+
+
+    <!-- http://momaf-data.utu.fi/NamedEntityType -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/NamedEntityType">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Vocabulary"/>
     </owl:Class>
     
 
