@@ -660,6 +660,10 @@ TODO This could be improved by parsing the string for more details. -->
     <momaf:skfid><xsl:value-of select="ProductionEventType/@elokuva-skftunniste"/></momaf:skfid>
   </xsl:template>
 
+  <xsl:template match="ProductionEvent[@elonet-tag='kuvausaika']">
+    <momaf:filmingtime><xsl:value-of select="ProductionEventType/@elokuva-kuvausaika"/></momaf:filmingtime>
+  </xsl:template>
+
   <!-- Main template for parsing filming locations. 
 
 The locations are parsed two times. First time parses each location
@@ -778,6 +782,10 @@ This tries really hard to find sensible place names and scene locations from the
 TODO this does  not work .-->
   <xsl:template match="/node()[starts-with(.,'-')]" mode="locations" priority="1">
     <momaf:sourcedata><momaf:sourcedesc><xsl:apply-templates/></momaf:sourcedesc></momaf:sourcedata>
+  </xsl:template>
+
+  <xsl:template match="ProductionEvent[@elonet-tag='arkistoaineisto']">
+    <momaf:archivalSources><xsl:value-of select="ProductionEventType/@elokuva-arkistoaineisto"/></momaf:archivalSources>
   </xsl:template>
   <!-- Skip the KAVI information gathering data
 
