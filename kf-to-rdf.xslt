@@ -681,12 +681,13 @@ This tries really hard to find sensible place names and scene locations from the
   <xsl:template match="elokuva_ulkokuvat|elokuva_sisakuvat|elokuva_studiot">
     <xsl:variable name="ins"><xsl:value-of select="replace(replace(.,'&amp;','&amp;amp;'),'I&gt;','i&gt;')"/></xsl:variable>
     <xsl:variable name="tp" select="name()"/>
+    <xsl:variable name="eltype" select="$locmap/momaf:orig[@key=$tp]"/>
     <xsl:variable name="elname">http://momaf-data.utu.fi/<xsl:value-of
-    select="$locmap/momaf:orig[@key=$tp]"/></xsl:variable>
+    select="$eltype"/></xsl:variable>
     <!-- In the data, filming locations are separated by <br/> elements. -->
     <xsl:for-each-group select="parse-xml-fragment($ins)/node()" group-adjacent="not(name()='br')" >
 	<xsl:variable name="adplace">
-	  <xsl:apply-templates select="current-group()" mode="adplace"/>
+	  <xsl:call-template name="adplace"/>
 	</xsl:variable>
 	<xsl:for-each-group select="current-group()" group-starting-with="node()[matches(.,'\)')]">
 	  <xsl:variable name="locrow">
@@ -694,7 +695,20 @@ This tries really hard to find sensible place names and scene locations from the
 	  </xsl:variable>
 	  <xsl:for-each select="$locrow/momaf:scenelocation">
 	    <momaf:hasFilmingLocation>
-	      <rdf:Description>
+	      <xsl:variable name="adname" select="encode-for-uri($adplace/momaf:hasAdminplace/rdf:Description/skos:prefLabel)"/>
+	      <xsl:variable name="locname" select="encode-for-uri($locrow/momaf:localname)"/>
+	      <xsl:variable name="scename" select="encode-for-uri(.)"/>
+	      <xsl:variable name="filminglocationid">
+		<xsl:text>http://momaf-data.utu.fi/filminglocation-</xsl:text>
+		<xsl:value-of select="$eltype"/>
+		<xsl:text>-</xsl:text>
+		<xsl:value-of select="$adname"/>
+		<xsl:text>-</xsl:text>
+		<xsl:value-of select="$locname"/>
+		<xsl:text>-</xsl:text>
+		<xsl:value-of select="$scename"/>
+	      </xsl:variable>
+	      <rdf:Description rdf:about="{$filminglocationid}">
 		<rdf:type rdf:resource="{$elname}"/>
 		<xsl:copy-of select="$adplace/momaf:hasAdminplace"/><xsl:copy-of select="$locrow/momaf:localname"/><xsl:copy-of select="."/>
 	      </rdf:Description>
@@ -721,10 +735,11 @@ This tries really hard to find sensible place names and scene locations from the
       </rdf:Description>
     </momaf:hasText>
   </xsl:template>
+
   <!-- "adminplace" in this terminology refers to an administrative
        name of a place: a town, city, country, etc. -->
-  <xsl:template match="/node()[matches(.,'^.*: .*$')]" mode="adplace">
-    <xsl:analyze-string select="." regex="^(.*): ">
+  <xsl:template name="adplace">
+    <xsl:analyze-string select="." regex="^(.*?): ">
       <xsl:matching-substring>
 	<momaf:hasAdminplace>
 	  <rdf:Description rdf:about="http://momaf-data.utu.fi/adminplace_{encode-for-uri(regex-group(1))}">
@@ -737,6 +752,7 @@ This tries really hard to find sensible place names and scene locations from the
       <xsl:non-matching-substring/>
     </xsl:analyze-string>
   </xsl:template>
+
   <!-- Parsing of scene locations -->
   <xsl:template match="/node()[matches(.,'[,:^] (.*) \(')]" mode="scenes">
     <xsl:analyze-string select="." regex="[,:^] (.*) \(">
@@ -746,7 +762,9 @@ This tries really hard to find sensible place names and scene locations from the
       <xsl:non-matching-substring/>
     </xsl:analyze-string>
   </xsl:template>
+
   <xsl:template match="*" mode="l2"/>
+
   <xsl:template match="i|I" mode="scenes">
     <xsl:for-each select="tokenize(.,',')">
       <momaf:scenelocation><xsl:value-of select="normalize-space(.)"/></momaf:scenelocation>
