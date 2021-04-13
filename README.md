@@ -138,6 +138,6 @@ sparql --data=all.ttl --query=../sparql/metadata-links-of-momaf-films.rq --resul
 xmlstarlet tr ../sparql/xml-to-html-momaf.xsl tmp.xml > metadata-links-of-momaf-films.html
 
 sparql --data=all.ttl --query=../sparql/metadata-links-of-momaf-actors.rq --results=xml > tmp.xml
-xmlstarlet tr ../sparql/xml-to-html-momaf.xsl tmp.xml | sed 's/&amp;/\&/g' > metadata-links-of-momaf-actors.html
+xmlstarlet tr ../sparql/xml-to-html-momaf.xsl tmp.xml > metadata-links-of-momaf-actors.html
 ```
 
