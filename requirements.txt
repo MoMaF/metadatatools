@@ -5,3 +5,4 @@ lxml
 SPARQLWrapper
 rdflib_jsonld
 requests
+jsonlines
