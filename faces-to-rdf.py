@@ -22,9 +22,8 @@ parser.add_argument('movies', nargs='+',
 args = parser.parse_args()
 
 momaf = rdflib.Namespace("http://momaf-data.utu.fi/")
-
 g = rdflib.Graph()
-g.bind("momaf",momaf)
+g.bind("momaf", momaf)
 
 labels = pd.read_csv('labels.csv')
 actors = pd.read_csv('actors.csv')
@@ -73,11 +72,12 @@ for m in args.movies:
                         if args.boxdata:
                             print('**boxdata** {} {} {} retinaface facenet {} {} {} {} 1 face {}'\
                                   .format(m, s, s+1, f[0], f[1], f[2], f[3], act[id]))
-                        ann = 'momaf:annotation_face_{}_{}_{}'.format(m, id, s)
-                        ann = rdflib.URIRef(ann)
+                        ann = 'annotation_face_{}_{}_{}'.format(m, id, s)
+                        #ann = rdflib.URIRef(ann)
+                        ann = momaf[ann]
                         g.add((ann, RDF.type,       momaf.FaceAnnotation))
-                        g.add((ann, momaf.ofMovie,  rdflib.URIRef('momaf:elonet_elokuva_'+str(m))))
-                        g.add((ann, momaf.hasAgent, rdflib.URIRef(tra[li])))
+                        g.add((ann, momaf.ofMovie,  momaf['elonet_elokuva_'+str(m)]))
+                        g.add((ann, momaf.hasAgent, momaf['elonet_henkilo_'+str(id)]))
 
                         med = rdflib.BNode()
                         g.add((ann, momaf.hasMedia, med))
