@@ -36,10 +36,10 @@ for _,i in actors.iterrows():
 #print(labels.index)
 #print(labels.columns)
 
-def xsdtime(s):
-    t = datetime.timedelta(seconds=s/25)
+def xsdtime(s, fps):
+    t = datetime.timedelta(seconds=s/fps)
     l = isodate.time_isoformat(t, format='%H:%M:%S.%f')
-    l = l[:-3]
+    # l = l[:-3]
     # print(s, t, type(t), l, type(l))
     return rdflib.Literal(l, datatype=XSD.time)
 
@@ -48,6 +48,7 @@ for m in args.movies:
     l = l.loc[l['cluster_status']=='labeled']
     l = l.loc[l['image_status']=='same']
 
+    fps = 24
     tra = {}
     for _,i in l.iterrows():
         tra[i['trajectory']] = i['label']
@@ -92,8 +93,8 @@ for m in args.movies:
                         g.add((box, momaf.maxX,     rdflib.Literal(f[2], datatype=XSD.decimal)))
                         g.add((box, momaf.maxY,     rdflib.Literal(f[3], datatype=XSD.decimal)))
 
-                        g.add((ann, momaf.annotationStartTime, xsdtime(s)))
-                        g.add((ann, momaf.annotationEndTime,   xsdtime(s+1)))
+                        g.add((ann, momaf.annotationStartTime, xsdtime(s,   fps)))
+                        g.add((ann, momaf.annotationEndTime,   xsdtime(s+1, fps)))
                     s += 1
 
 if not args.debug and not args.boxdata:
