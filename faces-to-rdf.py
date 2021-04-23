@@ -27,17 +27,21 @@ parser.add_argument('--debug', action='store_true',
                     help='show debug output instead of RDF')
 parser.add_argument('--boxdata', action='store_true',
                     help='output **boxdata** rows instead of RDF')
+parser.add_argument('--upload',action='store_true',help="Upload data directy to Triple Store")
 parser.add_argument('movies', nargs='+',
                     help='movie-ids ...')
 args = parser.parse_args()
 
+if args.upload:
+    store = sparqlstore.SPARQLUpdateStore(auth=(USERNAME,PASSWORD))
+    store.open((QSERVICE,USERVICE))
+    g = rdflib.Graph(store=store,identifier=rdflib.URIRef(RESULTGRAPH))
 
-store = sparqlstore.SPARQLUpdateStore(auth=(USERNAME,PASSWORD))
-store.open((QSERVICE,USERVICE))
-g = rdflib.Graph(store=store,identifier=rdflib.URIRef(RESULTGRAPH))
-
-store.remove_graph(g) # Easiest way to replace the whole set of data is to drop and re-create the graph
-store.add_graph(g)
+    store.remove_graph(g) # Easiest way to replace the whole set of data is to drop and re-create the graph
+    store.add_graph(g)
+else:
+    g = rdflib.Graph()
+    
 momaf = rdflib.Namespace("http://momaf-data.utu.fi/")
 g.bind("momaf", momaf)
 
@@ -113,5 +117,5 @@ for m in args.movies:
                         g.add((ann, momaf.annotationEndTime,   xsdtime(s+1, fps)))
                     s += 1
 
-if not args.debug and not args.boxdata:
+if not args.debug and not args.boxdata and not args.upload:
     print(g.serialize(format="turtle").decode("UTF-8"))
