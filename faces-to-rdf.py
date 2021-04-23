@@ -11,6 +11,16 @@ import datetime
 import isodate
 import rdflib
 from rdflib.namespace import XSD, RDF, RDFS
+from rdflib.plugins.stores import sparqlstore
+
+QSERVICE = "https://momaf-data.utu.fi:3034/momaf-raw/sparql"
+USERVICE = "https://momaf-data.utu.fi:3034/momaf-raw/update"
+USERNAME = "updater"
+# Set password in local instance
+PASSWORD = "***secret***"
+
+# Name of the named graph for result data
+RESULTGRAPH = "http://momaf-data.utu.fi/face_annotation_data"
 
 parser = argparse.ArgumentParser(description='Dump face detections and recognitions in RDF.')
 parser.add_argument('--debug', action='store_true',
@@ -21,8 +31,14 @@ parser.add_argument('movies', nargs='+',
                     help='movie-ids ...')
 args = parser.parse_args()
 
+
+store = sparqlstore.SPARQLUpdateStore(auth=(USERNAME,PASSWORD))
+store.open((QSERVICE,USERVICE))
+g = rdflib.Graph(store=store,identifier=rdflib.URIRef(RESULTGRAPH))
+
+store.remove_graph(g) # Easiest way to replace the whole set of data is to drop and re-create the graph
+store.add_graph(g)
 momaf = rdflib.Namespace("http://momaf-data.utu.fi/")
-g = rdflib.Graph()
 g.bind("momaf", momaf)
 
 labels = pd.read_csv('labels.csv')
