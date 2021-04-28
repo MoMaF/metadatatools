@@ -17,7 +17,7 @@ USERVICE = "https://momaf-data.utu.fi:3034/momaf-raw/update"
 USERNAME = "updater"
 PASSWORD = "***secret***"
 
-RESULTGRAPH = "http://momaf-data.utu.fi/lemmatized_texts"
+RESULTGRAPH = "http://momaf-data.utu.fi/lemmatized_texts_test"
 
 
 """
