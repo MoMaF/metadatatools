@@ -48,9 +48,29 @@ g.bind("momaf", momaf)
 labels = pd.read_csv('labels.csv')
 actors = pd.read_csv('actors.csv')
 
+### Get actor names etc. from triple store
+actorquery = """
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix momaf: <http://momaf-data.utu.fi/>
+prefix skos: <http://www.w3.org/2004/02/skos/core#>
+select * where {
+  ?person_uri a momaf:Person; 
+  momaf:elonet_ID ?elonet_id ; 
+  momaf:elonet_person_ID ?elonet_person_id; 
+  skos:prefLabel ?name }
+limit 5
+"""
+
+store = sparqlstore.SPARQLStore(QSERVICE)
+ares = store.query(actorquery)
+
 act = {}
-for _,i in actors.iterrows():
-    act[i['id']] = i['name']
+for r in ares:
+    if args.debug: print ("%s %s %s %s" % r)
+    act[int(str(r.elonet_person_id))] = str(r.name)
+
+if args.debug: print (act)
 
 #print(labels.index)
 #print(labels.columns)
