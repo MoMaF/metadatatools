@@ -59,7 +59,6 @@ select * where {
   momaf:elonet_ID ?elonet_id ; 
   momaf:elonet_person_ID ?elonet_person_id; 
   skos:prefLabel ?name }
-limit 5
 """
 
 store = sparqlstore.SPARQLStore(QSERVICE)
