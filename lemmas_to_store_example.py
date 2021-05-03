@@ -36,7 +36,8 @@ USERVICE = "https://momaf-data.utu.fi:3034/momaf-raw/update"
 USERNAME = "updater"
 PASSWORD = "***secret***"
 
-RESULTGRAPH = "http://momaf-data.utu.fi/lemmatized_texts"
+# The graph name below is the test graph name. For the real data, remove "_test" at end
+RESULTGRAPH = "http://momaf-data.utu.fi/lemmatized_texts_test"
 
 
 """
