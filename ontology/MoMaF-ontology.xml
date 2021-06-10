@@ -279,6 +279,15 @@
     
 
 
+    <!-- http://momaf-data.utu.fi/aspectratio_systematic -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/aspectratio_systematic">
+        <rdfs:subPropertyOf rdf:resource="http://momaf-data.utu.fi/aspectratio"/>
+        <rdfs:comment>Created for systematicizing Elonet data.</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://momaf-data.utu.fi/audience -->
 
     <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/audience">
@@ -741,6 +750,15 @@
     
 
 
+    <!-- http://momaf-data.utu.fi/soundsystem_systematic -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/soundsystem_systematic">
+        <rdfs:subPropertyOf rdf:resource="http://momaf-data.utu.fi/soundsystem"/>
+        <rdfs:comment xml:lang="en">Created for systematizing Elonet data</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://momaf-data.utu.fi/sourcefile -->
 
     <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/sourcefile">
@@ -888,6 +906,12 @@
         <rdfs:label xml:lang="fi">animaattori, kreditoimaton</rdfs:label>
         <rdfs:label xml:lang="en">animation, non-credited</rdfs:label>
     </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/Annotation -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Annotation"/>
     
 
 
@@ -1178,6 +1202,14 @@
         <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Expert"/>
         <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
         <rdfs:label xml:lang="fi">asiantuntija, kreditoimaton</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/FaceAnnotation -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/FaceAnnotation">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Annotation"/>
     </owl:Class>
     
 
