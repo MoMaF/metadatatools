@@ -745,7 +745,7 @@ This tries really hard to find sensible place names and scene locations from the
 	  <rdf:Description rdf:about="http://momaf-data.utu.fi/adminplace_{encode-for-uri(regex-group(1))}">
 	    <rdf:type rdf:resource="http://momaf-data.utu.fi/Adminplace"/>
 	    <rdfs:label xml:lang="fi"><xsl:value-of select="regex-group(1)"/></rdfs:label>
-	    <skos:prefLabel lang="fi"><xsl:value-of select="regex-group(1)"/></skos:prefLabel>
+	    <skos:prefLabel xml:lang="fi"><xsl:value-of select="regex-group(1)"/></skos:prefLabel>
 	  </rdf:Description>
 	</momaf:hasAdminplace>
       </xsl:matching-substring>
