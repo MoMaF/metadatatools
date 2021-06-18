@@ -11,6 +11,7 @@ import time
 import datetime
 import isodate
 import rdflib
+from urllib.parse import quote
 from rdflib.namespace import XSD, RDF, RDFS
 from rdflib.plugins.stores import sparqlstore
 
@@ -22,6 +23,7 @@ PASSWORD = "***secret***"
 
 # Name of the named graph for result data
 RESULTGRAPH = "http://momaf-data.utu.fi/face_annotation_data"
+FILM_FILES_GRAPH_NAME = "http://momaf-data.utu.fi/digital_film_files"
 
 dir = '/scratch/project_2002528'
 
@@ -39,11 +41,12 @@ if args.upload:
     store = sparqlstore.SPARQLUpdateStore(auth=(USERNAME,PASSWORD))
     store.open((QSERVICE,USERVICE))
     g = rdflib.Graph(store=store,identifier=rdflib.URIRef(RESULTGRAPH))
-
+    dfg = rdflib.Graph(store=store,identifier=rdflib.URIRef(FILM_FILES_GRAPH_NAME))
     store.remove_graph(g) # Easiest way to replace the whole set of data is to drop and re-create the graph
     store.add_graph(g)
 else:
     g = rdflib.Graph()
+    dfg = g
     
 momaf = rdflib.Namespace("http://momaf-data.utu.fi/")
 g.bind("momaf", momaf)
@@ -84,7 +87,30 @@ def xsdtime(s, fps):
     # print(s, t, type(t), l, type(l))
     return rdflib.Literal(l, datatype=XSD.time)
 
+def get_digital_film_file(movieid):
+    dfquery = """prefix momaf: <http://momaf-data.utu.fi/>
+SELECT  ?df WHERE {{ 
+  momaf:elonet_elokuva_{} momaf:hasRelatedFile ?df .
+  ?df a momaf:DigitalFilmFile. }}
+""".format(movieid)
+    dfres = store.query(dfquery)
+    if args.debug: print (ares[0])
+    return URIRef(ares[0])
+
+def make_digital_film_file(movie,filename,fwidth,fheight,fps):
+    df = momaf["film_file_"+quote(filename)]
+    dfg.add((movie,momaf.hasRelatedFile,df))
+    dfg.add((df,RDF.type,momaf.DigitalFilmFile))
+    dfg.add((df,momaf.fileName,rdflib.Literal(filename)))
+    dfg.add((df,momaf.frameWidth,rdflib.Literal(fwidth,datatype=XSD.int)))
+    dfg.add((df,momaf.frameHeight,rdflib.Literal(fheight,datatype=XSD.int)))
+    dfg.add((df,momaf.framesPerSecond,rdflib.Literal(fps,datatype=XSD.decimal)))
+    if args.debug: print(df)
+    return df
+
 for m in args.movies:
+    movie = momaf["elonet_elokuva_"+str(m)]
+
     l = labels.loc[labels['movie_id']==int(m)]
     l = l.loc[l['cluster_status']=='labeled']
     l = l.loc[l['image_status']=='same']
@@ -114,6 +140,14 @@ for m in args.movies:
                 fps = float(f)
     assert w is not None and h is not None and fps is not None
     assert w>0 and h>0 and fps and fps>0
+
+    #get filename
+    assert 'format' in meta
+    fname = meta['format']['filename'].split("/")[-1]
+    assert fname is not None
+
+    # get digital film file
+    df = make_digital_film_file(movie,fname,w,h,fps)
     
     tra = {}
     for _,i in l.iterrows():
@@ -126,43 +160,50 @@ for m in args.movies:
             # print(l)
             li = l['index']
             if li in tra:
+                # Annotation starts here
                 s = l['start']
+                e = s+l['len']
+                z = re.match('momaf:elonet_henkilo_(\d+)', tra[li])
+                assert z
+                id = int(z.group(1))
+                #print(m, s, f, tra[li], act[id])
+                ann_name = 'annotation_face_{}_{}_{}'.format(m, id, s)
+                #ann = rdflib.URIRef(ann)
+                ann = momaf[ann_name]
+                g.add((ann, RDF.type,       momaf.FaceAnnotation))
+                g.add((ann,momaf.annotates,df))
+                g.add((ann, momaf.refersToPerson, momaf['elonet_henkilo_'+str(id)]))
+                g.add((ann, momaf.firstFrame,rdflib.Literal(s, datatype=XSD.int)))
+                g.add((ann, momaf.lastFrame,rdflib.Literal(e, datatype=XSD.int)))
+                g.add((movie,momaf.hasAnnotation,ann))
+
+                #BBoxlist
+                bboxlistname = "bboxlist_"+ann_name
+                bboxlist = momaf[bboxlistname]
+                g.add((ann,momaf.bboxlist,bboxlist))
+                #bbox loop
                 b = l['bbs']
+                bcount=0
                 for f in b:
+                    bcount+=1
                     show = s>=82500 and s<84000
                     show = True
                     if show:
-                        z = re.match('momaf:elonet_henkilo_(\d+)', tra[li])
-                        assert z
-                        id = int(z.group(1))
-                        #print(m, s, f, tra[li], act[id])
                         if args.boxdata:
                             print('**boxdata** {} {} {} retinaface facenet {} {} {} {} 1 face {}'\
                                   .format(m, s, s+1, f[0], f[1], f[2], f[3], act[id]))
-                        ann = 'annotation_face_{}_{}_{}'.format(m, id, s)
-                        #ann = rdflib.URIRef(ann)
-                        ann = momaf[ann]
-                        g.add((ann, RDF.type,       momaf.FaceAnnotation))
-                        g.add((ann, momaf.ofMovie,  momaf['elonet_elokuva_'+str(m)]))
-                        g.add((ann, momaf.hasAgent, momaf['elonet_henkilo_'+str(id)]))
-
-                        med = rdflib.BNode()
-                        g.add((ann, momaf.hasMedia, med))
-                        g.add((med, RDF.type,       momaf.DigitalFilmFile))
-                        g.add((med, momaf.fileUrl,  rdflib.URIRef('optional')))
-                        g.add((med, momaf.fileName, rdflib.URIRef('optional')))
-                        g.add((med, RDFS.label,     rdflib.Literal('optional')))
-
-                        box = rdflib.BNode()
-                        g.add((ann, momaf.hasBoundinxBox, box))
+                        bboxname = "http://momaf-data.utu.fi/boundingbox_{}_{}_{}_{}_{}_{}".format(
+                            quote(fname), str(s),f[0],f[1],f[2],f[3])
+                        box = rdflib.URIRef(bboxname)
+                        g.add((bboxlist, RDF["_"+str(bcount)], box))
                         g.add((box, RDF.type,       momaf.BoundingBox))
+                        g.add((box, momaf.hasRelatedFile, df))
+                        g.add((box, momaf.frameNumber,rdflib.Literal(s,datatype=XSD.int)))
                         g.add((box, momaf.minX,     rdflib.Literal(f[0]/w, datatype=XSD.decimal)))
                         g.add((box, momaf.minY,     rdflib.Literal(f[1]/h, datatype=XSD.decimal)))
                         g.add((box, momaf.maxX,     rdflib.Literal(f[2]/w, datatype=XSD.decimal)))
                         g.add((box, momaf.maxY,     rdflib.Literal(f[3]/h, datatype=XSD.decimal)))
 
-                        g.add((ann, momaf.annotationStartTime, xsdtime(s,   fps)))
-                        g.add((ann, momaf.annotationEndTime,   xsdtime(s+1, fps)))
                     s += 1
 
 if not args.debug and not args.boxdata and not args.upload:
