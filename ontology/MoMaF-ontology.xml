@@ -50,6 +50,15 @@
     
 
 
+    <!-- http://momaf-data.utu.fi/annotates -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/annotates">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Annotation"/>
+        <rdfs:range rdf:resource="http://momaf-data.utu.fi/DigitalObject"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://momaf-data.utu.fi/appearsIn -->
 
     <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/appearsIn">
@@ -182,6 +191,16 @@
     
 
 
+    <!-- http://momaf-data.utu.fi/hasRelatedFile -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/hasRelatedFile">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Media"/>
+        <rdfs:range rdf:resource="http://momaf-data.utu.fi/DigitalObject"/>
+        <rdfs:comment xml:lang="en">Property used to link digital objects to media entities.</rdfs:comment>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://momaf-data.utu.fi/hasScreening -->
 
     <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/hasScreening">
@@ -241,7 +260,16 @@
 
     <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/mentionsNamedEntity">
         <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Text"/>
-        <rdfs:range rdf:resource="http://momaf-data.utu.fi/NamedEntity"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/refersToPerson -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/refersToPerson">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/FaceAnnotation"/>
+        <rdfs:range rdf:resource="http://momaf-data.utu.fi/Person"/>
     </owl:ObjectProperty>
     
 
@@ -579,6 +607,15 @@
     
 
 
+    <!-- http://momaf-data.utu.fi/firstFrame -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/firstFrame">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Annotation"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://momaf-data.utu.fi/hasCommentary -->
 
     <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/hasCommentary">
@@ -629,6 +666,15 @@
     <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/income">
         <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Movie"/>
         <rdfs:comment>Estimated income (at the theatres?)</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/lastFrame -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/lastFrame">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Annotation"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
     </owl:DatatypeProperty>
     
 
@@ -1140,6 +1186,20 @@
     
 
 
+    <!-- http://momaf-data.utu.fi/DigitalFilmFile -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/DigitalFilmFile">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/DigitalObject"/>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/DigitalObject -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/DigitalObject"/>
+    
+
+
     <!-- http://momaf-data.utu.fi/Director -->
 
     <owl:Class rdf:about="http://momaf-data.utu.fi/Director">
@@ -1239,6 +1299,14 @@
     
 
 
+    <!-- http://momaf-data.utu.fi/FinnishSubtitleFile -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/FinnishSubtitleFile">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/SubtitleFile"/>
+    </owl:Class>
+    
+
+
     <!-- http://momaf-data.utu.fi/FundingCompany -->
 
     <owl:Class rdf:about="http://momaf-data.utu.fi/FundingCompany">
@@ -1326,6 +1394,14 @@
         <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Lightningdesigner"/>
         <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
         <rdfs:label xml:lang="fi">valosuunnittelija, kreditoimaton</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/LocationAnnotation -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/LocationAnnotation">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Annotation"/>
     </owl:Class>
     
 
@@ -1448,6 +1524,14 @@
     <owl:Class rdf:about="http://momaf-data.utu.fi/NonCredited">
         <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/ProductionMember"/>
         <rdfs:label xml:lang="fi">kreditoimaton tekijä</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/ObjectAnnotation -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/ObjectAnnotation">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Annotation"/>
     </owl:Class>
     
 
@@ -1808,6 +1892,14 @@ This is the most generic class, and contains production members for which a more
     <owl:Class rdf:about="http://momaf-data.utu.fi/Subject">
         <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Vocabulary"/>
         <rdfs:comment xml:lang="en">Subject matter terms describing the content and themes of the movie.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/SubtitleFile -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/SubtitleFile">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/DigitalObject"/>
     </owl:Class>
     
 
