@@ -79,7 +79,7 @@ for r in ares:
     if args.debug: print ("%s %s %s %s" % r)
     act[int(str(r.elonet_person_id))] = str(r.name)
 
-if args.debug: print (act)
+#if args.debug: print (act)
 
 #print(labels.index)
 #print(labels.columns)
@@ -103,6 +103,7 @@ SELECT  ?df WHERE {{
 
 def make_digital_film_file(movie,filename,fwidth,fheight,fps):
     df = momaf["film_file_"+quote(filename)]
+    if args.debug: print(filename)
     dfg.add((movie,momaf.hasRelatedFile,df))
     dfg.add((df,RDF.type,momaf.DigitalFilmFile))
     dfg.add((df,momaf.fileName,rdflib.Literal(filename)))
@@ -173,6 +174,7 @@ for m in args.movies:
                 #print(m, s, f, tra[li], act[id])
                 ann_name = 'annotation_face_{}_{}_{}'.format(m, id, s)
                 #ann = rdflib.URIRef(ann)
+                if args.debug: print(ann_name)
                 ann = momaf[ann_name]
                 g.add((ann, RDF.type,       momaf.FaceAnnotation))
                 g.add((ann,momaf.annotates,df))
@@ -216,18 +218,18 @@ if not args.debug and not args.boxdata and not args.upload:
 
 if args.upload:
     auth = HTTPBasicAuth(USERNAME,PASSWORD)
+    # Will use N-Triples because that is the fastest to serialize/de-serialize
+    head = {'Content-Type':'application/n-triples'}
     # Data graph
     ds = g.serialize(format="nt").decode("UTF-8")
     dparams = {'graph' : RESULTGRAPH}
-    ddata = {'body' : ds}
     # PUT replaces graph
-    resp = requests.put(GRAPH_STORE_URL,data=ddata,params=dparams,auth=auth)
-    print(resp)
+    resp = requests.put(GRAPH_STORE_URL,data=ds,params=dparams,auth=auth,headers=head)
+    print(resp.content)
     # Digital Film Files graph
     dfs = dfg.serialize(format="nt").decode("UTF-8")
     dfparams = {'graph' : FILM_FILES_GRAPH_NAME }
-    dfdata = {'body':dfs}
     # POST merges data to existing graph
-    resp = requests.post(GRAPH_STORE_URL,data=dfdata,params=dfparams,auth=auth)
-    print(resp)
+    resp = requests.post(GRAPH_STORE_URL,data=dfs,params=dfparams,auth=auth,headers=head)
+    print(resp.content)
     
