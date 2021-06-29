@@ -41,16 +41,16 @@ parser.add_argument('movies', nargs='+',
                     help='movie-ids ...')
 args = parser.parse_args()
 
-if args.upload:
-    store = sparqlstore.SPARQLUpdateStore(auth=(USERNAME,PASSWORD))
-    store.open((QSERVICE,USERVICE))
-    g = rdflib.Graph(store=store,identifier=rdflib.URIRef(RESULTGRAPH))
-    dfg = rdflib.Graph(store=store,identifier=rdflib.URIRef(FILM_FILES_GRAPH_NAME))
-    store.remove_graph(g) # Easiest way to replace the whole set of data is to drop and re-create the graph
-    store.add_graph(g)
-else:
-    g = rdflib.Graph()
-    dfg = g
+# if args.upload:
+#     store = sparqlstore.SPARQLUpdateStore(auth=(USERNAME,PASSWORD))
+#     store.open((QSERVICE,USERVICE))
+#     g = rdflib.Graph(store=store,identifier=rdflib.URIRef(RESULTGRAPH))
+#     dfg = rdflib.Graph(store=store,identifier=rdflib.URIRef(FILM_FILES_GRAPH_NAME))
+#     store.remove_graph(g) # Easiest way to replace the whole set of data is to drop and re-create the graph
+#     store.add_graph(g)
+# else:
+g = rdflib.Graph()
+dfg = rdflib.Graph()
     
 momaf = rdflib.Namespace("http://momaf-data.utu.fi/")
 g.bind("momaf", momaf)
@@ -212,12 +212,22 @@ for m in args.movies:
 
 if not args.debug and not args.boxdata and not args.upload:
     print(g.serialize(format="turtle").decode("UTF-8"))
+    print(dfg.serialize(format="turtle").decode("UTF-8"))
 
 if args.upload:
-    ds = g.serialize(format="nt").decode("UTF-8")
     auth = HTTPBasicAuth(USERNAME,PASSWORD)
-    params = {'graph' : RESULTGRAPH}
-    data = {'body' : ds}
-    resp = requests.put(GRAPH_STORE_URL,data=data,params=params,auth=auth)
+    # Data graph
+    ds = g.serialize(format="nt").decode("UTF-8")
+    dparams = {'graph' : RESULTGRAPH}
+    ddata = {'body' : ds}
+    # PUT replaces graph
+    resp = requests.put(GRAPH_STORE_URL,data=ddata,params=dparams,auth=auth)
+    print(resp)
+    # Digital Film Files graph
+    dfs = dfg.serialize(format="nt").decode("UTF-8")
+    dfparams = {'graph' : FILM_FILES_GRAPH_NAME }
+    dfdata = {'body':dfs}
+    # POST merges data to existing graph
+    resp = requests.post(GRAPH_STORE_URL,data=dfdata,params=dfparams,auth=auth)
     print(resp)
     
