@@ -13,9 +13,13 @@ import isodate
 import rdflib
 from rdflib.namespace import XSD, RDF, RDFS
 from rdflib.plugins.stores import sparqlstore
+import requests
+from requests.auth import HTTPBasicAuth
+from requests.exceptions import ConnectionError, RequestException, HTTPError
 
 QSERVICE = "https://momaf-data.utu.fi:3034/momaf-raw/sparql"
 USERVICE = "https://momaf-data.utu.fi:3034/momaf-raw/update"
+GRAPH_STORE_URL ="https://momaf-data.utu.fi:3034/momaf-raw/data"
 USERNAME = "updater"
 # Set password in local instance
 PASSWORD = "***secret***"
@@ -35,15 +39,15 @@ parser.add_argument('movies', nargs='+',
                     help='movie-ids ...')
 args = parser.parse_args()
 
-if args.upload:
-    store = sparqlstore.SPARQLUpdateStore(auth=(USERNAME,PASSWORD))
-    store.open((QSERVICE,USERVICE))
-    g = rdflib.Graph(store=store,identifier=rdflib.URIRef(RESULTGRAPH))
+# if args.upload:
+#     store = sparqlstore.SPARQLUpdateStore(auth=(USERNAME,PASSWORD))
+#     store.open((QSERVICE,USERVICE))
+#     g = rdflib.Graph(store=store,identifier=rdflib.URIRef(RESULTGRAPH))
 
-    store.remove_graph(g) # Easiest way to replace the whole set of data is to drop and re-create the graph
-    store.add_graph(g)
-else:
-    g = rdflib.Graph()
+#     store.remove_graph(g) # Easiest way to replace the whole set of data is to drop and re-create the graph
+#     store.add_graph(g)
+# else:
+g = rdflib.Graph()
     
 momaf = rdflib.Namespace("http://momaf-data.utu.fi/")
 g.bind("momaf", momaf)
@@ -167,3 +171,12 @@ for m in args.movies:
 
 if not args.debug and not args.boxdata and not args.upload:
     print(g.serialize(format="turtle").decode("UTF-8"))
+
+if args.upload:
+    ds = g.serialize(format="nt").decode("UTF-8")
+    auth = HTTPBasicAuth(USERNAME,PASSWORD)
+    params = {'graph' : RESULTGRAPH}
+    data = {'body' : ds}
+    resp = requests.put(GRAPH_STORE_URL,data=data,params=params,auth=auth)
+    print(resp)
+    
