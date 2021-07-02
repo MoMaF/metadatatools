@@ -187,6 +187,7 @@ for m in args.movies:
                 bboxlistname = "bboxlist_"+ann_name
                 bboxlist = momaf[bboxlistname]
                 g.add((ann,momaf.bboxlist,bboxlist))
+                g.add((bboxlist,RDF.type,RDF.Seq))
                 #bbox loop
                 b = l['bbs']
                 bcount=0
