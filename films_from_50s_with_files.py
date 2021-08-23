@@ -1,16 +1,13 @@
 #! /usr/bin/env python3
 
-# sparql_get_freetext.py
-
-# Script base for retrieving the Content description, Synopsis and Review data from the MoMaF triple store.
+# films_from 50s_with_files.py
+# Script to return all 50s films with file names of the actual film files
 
 from SPARQLWrapper import SPARQLWrapper, JSON
 
 sparql = SPARQLWrapper("http://momaf-data.utu.fi:3030/momaf-raw/sparql")
 
-# This is the query to get the data. The size of result set is limited
-# to 3. If you want the whole data, remove 'limit 3' from the query
-# string below.
+# This is the query to get the data. 
 sparql.setQuery("""
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX text: <http://jena.apache.org/text#>
