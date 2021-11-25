@@ -225,7 +225,8 @@ if args.upload:
     ds = g.serialize(format="nt").decode("UTF-8")
     dparams = {'graph' : RESULTGRAPH}
     # PUT replaces graph
-    resp = requests.put(GRAPH_STORE_URL,data=ds,params=dparams,auth=auth,headers=head)
+    # Better not do that; merge changes instead
+    resp = requests.post(GRAPH_STORE_URL,data=ds,params=dparams,auth=auth,headers=head)
     print(resp.content)
     # Digital Film Files graph
     dfs = dfg.serialize(format="nt").decode("UTF-8")
