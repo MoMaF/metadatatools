@@ -193,6 +193,7 @@ for m in args.movies:
                 bboxlistname = "bboxlist_"+ann_name
                 bboxlist = momaf[bboxlistname]
                 g.add((ann,momaf.bboxlist,bboxlist))
+                g.add((bboxlist,RDF.type,RDF.Seq))
                 #bbox loop
                 b = l['bbs']
                 bcount=0
@@ -230,7 +231,8 @@ if args.upload:
     ds = g.serialize(format="nt").decode("UTF-8")
     dparams = {'graph' : RESULTGRAPH}
     # PUT replaces graph
-    resp = requests.put(GRAPH_STORE_URL,data=ds,params=dparams,auth=auth,headers=head)
+    # Better not do that; merge changes instead
+    resp = requests.post(GRAPH_STORE_URL,data=ds,params=dparams,auth=auth,headers=head)
     print(resp.content)
     # Digital Film Files graph
     dfs = dfg.serialize(format="nt").decode("UTF-8")
