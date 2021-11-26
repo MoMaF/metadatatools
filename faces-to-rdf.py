@@ -24,7 +24,6 @@ GRAPH_STORE_URL ="https://momaf-data.utu.fi:3034/momaf-raw/data"
 USERNAME = "updater"
 # Set password in local instance
 PASSWORD = "***secret***"
-PASSWORD = "MoMaFTauno767Palo"
 
 # Name of the named graph for result data
 RESULTGRAPH = "http://momaf-data.utu.fi/face_annotation_data"
@@ -55,6 +54,7 @@ dfg = rdflib.Graph()
     
 momaf = rdflib.Namespace("http://momaf-data.utu.fi/")
 g.bind("momaf", momaf)
+dfg.bind("momaf", momaf)
 
 labels = pd.read_csv('labels.csv')
 # actors = pd.read_csv('actors.csv')
@@ -172,7 +172,7 @@ for m in args.movies:
             if li in tra:
                 # Annotation starts here
                 s = l['start']
-                e = s+l['len']
+                e = s+l['len']-1
                 z = re.match('momaf:elonet_henkilo_(\d+)', tra[li])
                 assert z
                 id = int(z.group(1))
