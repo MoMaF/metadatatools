@@ -24,6 +24,7 @@ GRAPH_STORE_URL ="https://momaf-data.utu.fi:3034/momaf-raw/data"
 USERNAME = "updater"
 # Set password in local instance
 PASSWORD = "***secret***"
+PASSWORD = "MoMaFTauno767Palo"
 
 # Name of the named graph for result data
 RESULTGRAPH = "http://momaf-data.utu.fi/face_annotation_data"
@@ -157,9 +158,13 @@ for m in args.movies:
     tra = {}
     for _,i in l.iterrows():
         tra[i['trajectory']] = i['label']
-    
+        if args.debug:
+            print('LABEL', i['trajectory'], i['label'])
+        
     d = dir+'/emil/data/'+m+'-data'
     trajl = d+'/trajectories.jsonl'
+    if args.debug:
+        print('TRAJ', trajl)
     with jsonlines.open(trajl) as tr:
         for l in tr:
             # print(l)
@@ -171,7 +176,8 @@ for m in args.movies:
                 z = re.match('momaf:elonet_henkilo_(\d+)', tra[li])
                 assert z
                 id = int(z.group(1))
-                #print(m, s, f, tra[li], act[id])
+                if args.debug:
+                    print('AAA', m, s, e, f, tra[li], id, act[id])
                 ann_name = 'annotation_face_{}_{}_{}'.format(m, id, s)
                 #ann = rdflib.URIRef(ann)
                 if args.debug: print(ann_name)
