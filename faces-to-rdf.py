@@ -108,8 +108,8 @@ def make_digital_film_file(movie,filename,fwidth,fheight,fps):
     dfg.add((movie,momaf.hasRelatedFile,df))
     dfg.add((df,RDF.type,momaf.DigitalFilmFile))
     dfg.add((df,momaf.fileName,rdflib.Literal(filename)))
-    dfg.add((df,momaf.frameWidth,rdflib.Literal(fwidth,datatype=XSD.int)))
-    dfg.add((df,momaf.frameHeight,rdflib.Literal(fheight,datatype=XSD.int)))
+    dfg.add((df,momaf.frameWidth,rdflib.Literal(fwidth,datatype=XSD.integer)))
+    dfg.add((df,momaf.frameHeight,rdflib.Literal(fheight,datatype=XSD.integer)))
     dfg.add((df,momaf.framesPerSecond,rdflib.Literal(fps,datatype=XSD.decimal)))
     if args.debug: print(df)
     return df
@@ -185,8 +185,8 @@ for m in args.movies:
                 g.add((ann, RDF.type,       momaf.FaceAnnotation))
                 g.add((ann,momaf.annotates,df))
                 g.add((ann, momaf.refersTo, momaf['elonet_henkilo_'+str(id)]))
-                g.add((ann, momaf.firstFrame,rdflib.Literal(s, datatype=XSD.int)))
-                g.add((ann, momaf.lastFrame,rdflib.Literal(e, datatype=XSD.int)))
+                g.add((ann, momaf.firstFrame,rdflib.Literal(s, datatype=XSD.integer)))
+                g.add((ann, momaf.lastFrame,rdflib.Literal(e, datatype=XSD.integer)))
                 g.add((movie,momaf.hasAnnotation,ann))
 
                 #BBoxlist
@@ -211,7 +211,7 @@ for m in args.movies:
                         g.add((bboxlist, RDF["_"+str(bcount)], box))
                         g.add((box, RDF.type,       momaf.BoundingBox))
                         g.add((box, momaf.hasRelatedFile, df))
-                        g.add((box, momaf.frameNumber,rdflib.Literal(s,datatype=XSD.int)))
+                        g.add((box, momaf.frameNumber,rdflib.Literal(s,datatype=XSD.integer)))
                         g.add((box, momaf.minX,     rdflib.Literal(f[0]/w, datatype=XSD.decimal)))
                         g.add((box, momaf.minY,     rdflib.Literal(f[1]/h, datatype=XSD.decimal)))
                         g.add((box, momaf.maxX,     rdflib.Literal(f[2]/w, datatype=XSD.decimal)))
