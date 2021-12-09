@@ -184,7 +184,7 @@ for m in args.movies:
                 ann = momaf[ann_name]
                 g.add((ann, RDF.type,       momaf.FaceAnnotation))
                 g.add((ann,momaf.annotates,df))
-                g.add((ann, momaf.refersToPerson, momaf['elonet_henkilo_'+str(id)]))
+                g.add((ann, momaf.refersTo, momaf['elonet_henkilo_'+str(id)]))
                 g.add((ann, momaf.firstFrame,rdflib.Literal(s, datatype=XSD.int)))
                 g.add((ann, momaf.lastFrame,rdflib.Literal(e, datatype=XSD.int)))
                 g.add((movie,momaf.hasAnnotation,ann))
