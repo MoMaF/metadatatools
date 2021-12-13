@@ -2,6 +2,7 @@
 
 import json
 import jsonlines
+import configparser
 import numpy as np
 import pandas as pd
 import re
@@ -21,9 +22,6 @@ from requests.exceptions import ConnectionError, RequestException, HTTPError
 QSERVICE = "https://momaf-data.utu.fi:3034/momaf-raw/sparql"
 USERVICE = "https://momaf-data.utu.fi:3034/momaf-raw/update"
 GRAPH_STORE_URL ="https://momaf-data.utu.fi:3034/momaf-raw/data"
-USERNAME = "updater"
-# Set password in local instance
-PASSWORD = "***secret***"
 
 # Name of the named graph for result data
 RESULTGRAPH = "http://momaf-data.utu.fi/face_annotation_data"
@@ -31,7 +29,13 @@ FILM_FILES_GRAPH_NAME = "http://momaf-data.utu.fi/digital_film_files"
 
 dir = '/scratch/project_2002528'
 
-parser = argparse.ArgumentParser(description='Dump face detections and recognitions in RDF.')
+# Read username and password from INI file. Simple.
+config = configparser.ConfigParser()
+config.read("momaf.ini")
+USERNAME = config["triplestore"]["updateusername"]
+PASSWORD = config["triplestore"]["updatepassword"]
+
+parser = argparse.ArgumentParser(description='Dump face detections and recognitions in RDF. Reads username and password from momaf.ini. See momaf.ini.template.')
 parser.add_argument('--debug', action='store_true',
                     help='show debug output instead of RDF')
 parser.add_argument('--boxdata', action='store_true',
