@@ -12,6 +12,7 @@ import time
 import datetime
 import isodate
 import rdflib
+from pathlib import Path
 from urllib.parse import quote
 from rdflib.namespace import XSD, RDF, RDFS
 from rdflib.plugins.stores import sparqlstore
@@ -28,6 +29,7 @@ RESULTGRAPH = "http://momaf-data.utu.fi/face_annotation_data"
 FILM_FILES_GRAPH_NAME = "http://momaf-data.utu.fi/digital_film_files"
 
 dir = '/scratch/project_2002528'
+datadir = dir + "/emil/data/"
 
 # Read username and password from INI file. Simple.
 config = configparser.ConfigParser()
@@ -40,11 +42,13 @@ parser.add_argument('--debug', action='store_true',
                     help='show debug output instead of RDF')
 parser.add_argument('--boxdata', action='store_true',
                     help='output **boxdata** rows instead of RDF')
-parser.add_argument('--upload',action='store_true',help="Upload data directy to Triple Store")
-parser.add_argument('movies', nargs='+',
+parser.add_argument('--upload',action='store_true',help="Upload data directy to Triple Store. Uploading with argument '--all' replaces the face annotation data graph completely; specifying movie id's on the command line merges data for those movies with existing data in the graph.")
+parser.add_argument('--all', action='store_true',help="Process all movies. Overrides any single movie id list present")
+parser.add_argument('movies', nargs='*',
                     help='movie-ids ...')
 args = parser.parse_args()
 
+if args.debug: print (args)
 # if args.upload:
 #     store = sparqlstore.SPARQLUpdateStore(auth=(USERNAME,PASSWORD))
 #     store.open((QSERVICE,USERVICE))
@@ -118,7 +122,15 @@ def make_digital_film_file(movie,filename,fwidth,fheight,fps):
     if args.debug: print(df)
     return df
 
-for m in args.movies:
+if args.all:
+    # Get all movie id's from the datadir
+    movies = list(map(lambda a : re.match(r".*/(.*)-data$",str(a)).group(1),sorted(Path(datadir).glob("*-data"))))
+else:
+    movies = args.movies
+
+if args.debug: print (list(movies))
+
+for m in movies:
     movie = momaf["elonet_elokuva_"+str(m)]
 
     l = labels.loc[labels['movie_id']==int(m)]
@@ -165,7 +177,7 @@ for m in args.movies:
         if args.debug:
             print('LABEL', i['trajectory'], i['label'])
         
-    d = dir+'/emil/data/'+m+'-data'
+    d = datadir+str(m)+'-data'
     trajl = d+'/trajectories.jsonl'
     if args.debug:
         print('TRAJ', trajl)
@@ -234,9 +246,12 @@ if args.upload:
     # Data graph
     ds = g.serialize(format="nt").decode("UTF-8")
     dparams = {'graph' : RESULTGRAPH}
-    # PUT replaces graph
-    # Better not do that; merge changes instead
-    resp = requests.post(GRAPH_STORE_URL,data=ds,params=dparams,auth=auth,headers=head)
+    # PUT replaces graph; use only if uploading all
+    # use POST for adding single film data
+    if args.all:
+        resp = requests.put(GRAPH_STORE_URL,data=ds,params=dparams,auth=auth,headers=head)
+    else:
+        resp = requests.post(GRAPH_STORE_URL,data=ds,params=dparams,auth=auth,headers=head)
     print(resp.content)
     # Digital Film Files graph
     dfs = dfg.serialize(format="nt").decode("UTF-8")
