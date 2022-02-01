@@ -15,7 +15,7 @@ Since 0.2:
 - add datatype declarations to durations
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"
-		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		xmlns:xs="http://www.w3.org/2001/XMLSchema#"
 		xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 		xmlns:momaf="http://momaf-data.utu.fi/"
 		xmlns:momafsubject="http://momaf-data.utu.fi/subject/"
