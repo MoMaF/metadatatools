@@ -1,0 +1,26 @@
+# Query roles for word "poliisi" in the movies with premiere between 1950-01-01 and 1960-01-01
+
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX text: <http://jena.apache.org/text#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+prefix momaf:  <http://momaf-data.utu.fi/>
+
+select distinct ?elokuva ?rooli (?date as ?ensi_ilta) ?f
+where
+{
+  ?f skos:prefLabel ?elokuva .
+  ?f momaf:hasMember [ momaf:roleDescription ?rooli ].
+  filter (contains(?rooli,"poliisi")) .
+  
+  # Seuraavat viisi riviä rajoittavat haun ensi-iltapäivän mukaan
+  bind ("1950-01-01" as ?sdate)
+  bind ("1960-01-01" as ?edate)
+  ?f momaf:hasScreening [ a momaf:Premiere; momaf:date ?date ]  
+  filter (xsd:dateTime(concat(xsd:string(?date),"T00:00:00")) >= xsd:dateTime(concat(?sdate,"T00:00:00")) &&
+	  xsd:dateTime(concat(xsd:string(?date),"T00:00:00")) < xsd:dateTime(concat(?edate,"T00:00:00")))
+  
+}  
+order by ?date
