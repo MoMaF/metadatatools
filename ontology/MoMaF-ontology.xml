@@ -265,6 +265,25 @@
     
 
 
+    <!-- http://momaf-data.utu.fi/referenceTo -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/referenceTo">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Annotation"/>
+        <rdfs:range rdf:resource="http://momaf-data.utu.fi/AnnotationReference"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/refersTo -->
+
+    <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/refersTo">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Annotation"/>
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/AnnotationReference"/>
+        <rdfs:range rdf:resource="http://momaf-data.utu.fi/AnnotationReferenceClass"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://momaf-data.utu.fi/refersToPerson -->
 
     <owl:ObjectProperty rdf:about="http://momaf-data.utu.fi/refersToPerson">
@@ -607,11 +626,50 @@
     
 
 
+    <!-- http://momaf-data.utu.fi/fileName -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/fileName">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/DigitalObject"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://momaf-data.utu.fi/firstFrame -->
 
     <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/firstFrame">
         <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Annotation"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:comment xml:lang="en">Used for annotations. The number of the first frame for which this annotation is valid.</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/frameHeight -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/frameHeight">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/DigitalFilmFile"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:comment xml:lang="en">Frame height in pixels, of DigitalFilmFile</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/frameWidth -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/frameWidth">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/DigitalFilmFile"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:comment xml:lang="en">Frame width in pixels, of a DigitalFilmFile</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://momaf-data.utu.fi/framesPerSecond -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/framesPerSecond">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/DigitalFilmFile"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#double"/>
+        <rdfs:comment xml:lang="en">Frames per second, as double, of DigitalFilmFile.</rdfs:comment>
     </owl:DatatypeProperty>
     
 
@@ -675,6 +733,7 @@
     <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/lastFrame">
         <rdfs:domain rdf:resource="http://momaf-data.utu.fi/Annotation"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:comment xml:lang="en">Used for annotations. The number of the last frame for which this annotation is valid.</rdfs:comment>
     </owl:DatatypeProperty>
     
 
@@ -778,6 +837,15 @@
     
 
 
+    <!-- http://momaf-data.utu.fi/score -->
+
+    <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/score">
+        <rdfs:domain rdf:resource="http://momaf-data.utu.fi/AnnotationReference"/>
+        <rdfs:comment xml:lang="en">Score describing the quality or goodness of match behind this annotation. A measure of reliability, a decimal between 0 and 1</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://momaf-data.utu.fi/skfid -->
 
     <owl:DatatypeProperty rdf:about="http://momaf-data.utu.fi/skfid">
@@ -853,6 +921,22 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
+    
+
+
+    <!-- http://momaf-data.utu.fi/ASRAnnotation -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/ASRAnnotation">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Annotation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/ASRText -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/ASRText">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Text"/>
+    </owl:Class>
     
 
 
@@ -957,7 +1041,21 @@
 
     <!-- http://momaf-data.utu.fi/Annotation -->
 
-    <owl:Class rdf:about="http://momaf-data.utu.fi/Annotation"/>
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Annotation">
+        <rdfs:comment xml:lang="en">Superclass for annotations. Should not be used directly for any object.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/AnnotationReference -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/AnnotationReference"/>
+    
+
+
+    <!-- http://momaf-data.utu.fi/AnnotationReferenceClass -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/AnnotationReferenceClass"/>
     
 
 
@@ -999,6 +1097,22 @@
         <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/NonCredited"/>
         <rdfs:label xml:lang="fi">apulaisleikkaaja, kreditoimaton</rdfs:label>
         <rdfs:label xml:lang="en">assistant editor, non-credited</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/AudioTagAnnotation -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/AudioTagAnnotation">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Annotation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/AudioTagClass -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/AudioTagClass">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/AnnotationReferenceClass"/>
     </owl:Class>
     
 
@@ -1536,6 +1650,14 @@
     
 
 
+    <!-- http://momaf-data.utu.fi/ObjectClass -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/ObjectClass">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/AnnotationReferenceClass"/>
+    </owl:Class>
+    
+
+
     <!-- http://momaf-data.utu.fi/Originalwork -->
 
     <owl:Class rdf:about="http://momaf-data.utu.fi/Originalwork">
@@ -1733,6 +1855,22 @@ This is the most generic class, and contains production members for which a more
     
 
 
+    <!-- http://momaf-data.utu.fi/SceneAnnotation -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/SceneAnnotation">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/Annotation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://momaf-data.utu.fi/SceneClass -->
+
+    <owl:Class rdf:about="http://momaf-data.utu.fi/SceneClass">
+        <rdfs:subClassOf rdf:resource="http://momaf-data.utu.fi/AnnotationReferenceClass"/>
+    </owl:Class>
+    
+
+
     <!-- http://momaf-data.utu.fi/Screening -->
 
     <owl:Class rdf:about="http://momaf-data.utu.fi/Screening">
@@ -1914,7 +2052,9 @@ This is the most generic class, and contains production members for which a more
 
     <!-- http://momaf-data.utu.fi/Text -->
 
-    <owl:Class rdf:about="http://momaf-data.utu.fi/Text"/>
+    <owl:Class rdf:about="http://momaf-data.utu.fi/Text">
+        <rdfs:comment xml:lang="en">Superclass for all text data classes. Should not be used directly.</rdfs:comment>
+    </owl:Class>
     
 
 
