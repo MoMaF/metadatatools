@@ -15,12 +15,8 @@ where
   ?f momaf:hasMember [ momaf:roleDescription ?rooli ].
   filter (contains(?rooli,"poliisi")) .
   
-  # Seuraavat viisi riviä rajoittavat haun ensi-iltapäivän mukaan
-  bind ("1950-01-01" as ?sdate)
-  bind ("1960-01-01" as ?edate)
+  # Seuraavat kaksi riviä rajoittavat haun ensi-iltapäivän vuosiluvun mukaan
   ?f momaf:hasScreening [ a momaf:Premiere; momaf:date ?date ]  
-  filter (xsd:dateTime(concat(xsd:string(?date),"T00:00:00")) >= xsd:dateTime(concat(?sdate,"T00:00:00")) &&
-	  xsd:dateTime(concat(xsd:string(?date),"T00:00:00")) < xsd:dateTime(concat(?edate,"T00:00:00")))
-  
+  filter (xsd:int(xsd:gYear(?date)) >= 1950 && xsd:int(xsd:gYear(?date)) <1961)
 }  
 order by ?date
