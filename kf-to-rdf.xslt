@@ -16,6 +16,8 @@ Since 0.2:
 - Fix broadcast data: date, place, audience
 - add datatype declarations to durations
 - fix datatype definitions: must be full URI's, prefices here not understood
+- fix non-credited actor role descriptions (were missing)
+- fix one duration format error, in form "134'45"
 
 Datatypes:
 
@@ -257,7 +259,7 @@ rdf:HTML - http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML
 	      <xsl:non-matching-substring>
 		<xsl:analyze-string select="$as" regex="(\d+)'(\d*)">
 		  <xsl:matching-substring>
-		    <momaf:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#dayTimeDuration">PT<xsl:value-of select="regex-group(1)"/>M<xsl:value-of select="regex-group(2)"/>S</momaf:duration>
+		    <momaf:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#dayTimeDuration">PT<xsl:value-of select="regex-group(1)"/>M<xsl:if test="regex-group(2)!=''"><xsl:value-of select="regex-group(2)"/>S</xsl:if></momaf:duration>
 		  </xsl:matching-substring>
 		</xsl:analyze-string>
 	      </xsl:non-matching-substring>
@@ -431,6 +433,9 @@ Agent in a Media.
 	</xsl:if>
 	<xsl:if test="AgentName/@elokuva-elonayttelija-rooli!=''">
 	  <momaf:roleDescription><xsl:value-of select="AgentName/@elokuva-elonayttelija-rooli"/></momaf:roleDescription>
+	</xsl:if>
+	<xsl:if test="AgentName/@elokuva-elokreditoimatonnayttelija-rooli!=''">
+	  <momaf:roleDescription><xsl:value-of select="AgentName/@elokuva-elokreditoimatonnayttelija-rooli"/></momaf:roleDescription>
 	</xsl:if>
       </rdf:Description>
     </momaf:hasMember>
