@@ -135,3 +135,4 @@ dmypy.json
 
 # Local INI
 momaf.ini
+/ontology/MoMaF-ontology.properties
