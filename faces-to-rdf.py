@@ -24,6 +24,7 @@ GRAPH_STORE_URL ="https://momaf-data.utu.fi:3034/momaf-raw/data"
 USERNAME = "updater"
 # Set password in local instance
 PASSWORD = "***secret***"
+PASSWORD = "MoMaFTauno767Palo"
 
 # Name of the named graph for result data
 RESULTGRAPH = "http://momaf-data.utu.fi/face_annotation_data"
@@ -203,8 +204,8 @@ for m in args.movies:
                     show = True
                     if show:
                         if args.boxdata:
-                            print('**boxdata** {} {} {} retinaface facenet {} {} {} {} 1 face {}'\
-                                  .format(m, s, s+1, f[0], f[1], f[2], f[3], act[id]))
+                            print('**boxdata** {:07d} {} {} retinaface facenet {} {} {} {} 1 face {}'\
+                                  .format(int(m), s, s+1, f[0], f[1], f[2], f[3], act[id]))
                         bboxname = "http://momaf-data.utu.fi/boundingbox_{}_{}_{}_{}_{}_{}".format(
                             quote(fname), str(s),f[0],f[1],f[2],f[3])
                         box = rdflib.URIRef(bboxname)
