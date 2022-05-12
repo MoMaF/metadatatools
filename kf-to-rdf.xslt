@@ -3,6 +3,8 @@
 
 Harri Kiiskinen for MoMaF project, 2021.
 
+TODO: rdf:datatype attribute does not interpret prefices, the datatypes should be full URI's
+TODO: kreditoimattomien näyttelijöiden roolitiedot eivät tule läpi, ks. esim. 117150
 Changes:
 
 Since 0.2:
@@ -13,6 +15,18 @@ Since 0.2:
 - remove illegal date 0000-00-00
 - Fix broadcast data: date, place, audience
 - add datatype declarations to durations
+- fix datatype definitions: must be full URI's, prefices here not understood
+- fix non-credited actor role descriptions (were missing)
+- fix one duration format error, in form "134'45"
+
+Datatypes:
+
+xs:int - http://www.w3.org/2001/XMLSchema#integer
+xs:date - http://www.w3.org/2001/XMLSchema#date
+xs:duration -  http://www.w3.org/2001/XMLSchema#dayTimeDuration
+xs:gYear - http://www.w3.org/2001/XMLSchema#gYear
+rdf:HTML - http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML
+
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"
 		xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -218,7 +232,7 @@ Since 0.2:
     <xsl:choose>
       <xsl:when test="$ds='00.00.0000'"/>
       <xsl:otherwise>
-	<momaf:date rdf:datatype="xs:date"><xsl:value-of select="replace(string-join(reverse(tokenize($ds,'\.')),'-'),'-00','-01')"/></momaf:date>
+	<momaf:date rdf:datatype="http://www.w3.org/2001/XMLSchema#date"><xsl:value-of select="replace(string-join(reverse(tokenize($ds,'\.')),'-'),'-00','-01')"/></momaf:date>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:function>
@@ -235,17 +249,17 @@ Since 0.2:
       <xsl:non-matching-substring>
 	<xsl:analyze-string select="$as" regex="^([0-9]+)min">
 	  <xsl:matching-substring>
-	    <momaf:duration rdf:datatype="xs:duration">PT<xsl:value-of select="regex-group(1)"/>M</momaf:duration>
+	    <momaf:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#dayTimeDuration">PT<xsl:value-of select="regex-group(1)"/>M</momaf:duration>
 	  </xsl:matching-substring>
 	  <xsl:non-matching-substring>
 	    <xsl:analyze-string select="$as" regex="\D(\d?\d):(\d?\d):(\d?\d)\D">
 	      <xsl:matching-substring>
-		<momaf:duration rdf:datatype="xs:duration">PT<xsl:value-of select="regex-group(1)"/>H<xsl:value-of select="regex-group(2)"/>M<xsl:value-of select="regex-group(3)"/>S</momaf:duration>
+		<momaf:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#dayTimeDuration">PT<xsl:value-of select="regex-group(1)"/>H<xsl:value-of select="regex-group(2)"/>M<xsl:value-of select="regex-group(3)"/>S</momaf:duration>
 	      </xsl:matching-substring>
 	      <xsl:non-matching-substring>
 		<xsl:analyze-string select="$as" regex="(\d+)'(\d*)">
 		  <xsl:matching-substring>
-		    <momaf:duration rdf:datatype="xs:duration">PT<xsl:value-of select="regex-group(1)"/>M<xsl:value-of select="regex-group(2)"/>S</momaf:duration>
+		    <momaf:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#dayTimeDuration">PT<xsl:value-of select="regex-group(1)"/>M<xsl:if test="regex-group(2)!=''"><xsl:value-of select="regex-group(2)"/>S</xsl:if></momaf:duration>
 		  </xsl:matching-substring>
 		</xsl:analyze-string>
 	      </xsl:non-matching-substring>
@@ -420,6 +434,9 @@ Agent in a Media.
 	<xsl:if test="AgentName/@elokuva-elonayttelija-rooli!=''">
 	  <momaf:roleDescription><xsl:value-of select="AgentName/@elokuva-elonayttelija-rooli"/></momaf:roleDescription>
 	</xsl:if>
+	<xsl:if test="AgentName/@elokuva-elokreditoimatonnayttelija-rooli!=''">
+	  <momaf:roleDescription><xsl:value-of select="AgentName/@elokuva-elokreditoimatonnayttelija-rooli"/></momaf:roleDescription>
+	</xsl:if>
       </rdf:Description>
     </momaf:hasMember>
   </xsl:template>
@@ -489,7 +506,7 @@ TODO This gets called in places it is not needed. -->
     <momaf:moviefestival rdf:parseType="Resource">
       <rdf:type rdf:resource="http://momaf-data.utu.fi/Festival"/>
       <rdfs:label><xsl:value-of select="ProductionEventType/@elokuva-elofestivaaliosallistuminen-aihe"/><xsl:text>, </xsl:text><xsl:value-of select="Region/RegionName"/></rdfs:label>
-      <momaf:date rdf:datatype="xs:gYear"><xsl:value-of select="momaf:get_first_int(DateText)"/></momaf:date>
+      <momaf:date rdf:datatype="http://www.w3.org/2001/XMLSchema#gYear"><xsl:value-of select="momaf:get_first_int(DateText)"/></momaf:date>
     </momaf:moviefestival>
   </xsl:template>
 
@@ -588,7 +605,7 @@ mean something else.
 
   <!-- Audience in theatres -->
   <xsl:template match="ProductionEvent[@elonet-tag='katsojaluku']/ProductionEventType">
-    <momaf:audience rdf:datatype="xs:int"><xsl:value-of select="momaf:get_first_int(replace(@elokuva-katsojaluku,' ',''))"/></momaf:audience>
+    <momaf:audience rdf:datatype="http://www.w3.org/2001/XMLSchema#integer"><xsl:value-of select="momaf:get_first_int(replace(@elokuva-katsojaluku,' ',''))"/></momaf:audience>
     <momaf:audienceNote><xsl:value-of select="@elokuva-katsojaluku"/></momaf:audienceNote>
   </xsl:template>
 
@@ -630,7 +647,7 @@ from the text. -->
 
 TODO This could be improved by parsing the string for more details. -->
   <xsl:template match="ProductionEvent[@elonet-tag='musiikki']">
-    <momaf:music rdf:datatype="rdf:HTML"><xsl:apply-templates select="elokuva_musiikki"/></momaf:music>
+    <momaf:music rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><xsl:apply-templates select="elokuva_musiikki"/></momaf:music>
   </xsl:template>
 
   <!-- Film type -->
@@ -729,7 +746,7 @@ This tries really hard to find sensible place names and scene locations from the
     <momaf:hasText>
       <rdf:Description rdf:about="{$entityname}">
 	<rdf:type rdf:resource="{$elnamefulldesc}"/>
-	<momaf:text xml:lang="fi" rdf:datatype="rdf:HTML">
+	<momaf:text xml:lang="fi" rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML">
 	  <xsl:value-of select="$ins2"/>
 	</momaf:text>
       </rdf:Description>
@@ -842,13 +859,13 @@ TODO Check if this is really so. -->
   <xsl:template match="ProductionEvent[@elonet-tag='lehdistoarvio']">
     <xsl:param name="elonet_id" tunnel="yes"/>
     <xsl:variable name="entityname">http://momaf-data.utu.fi/<xsl:value-of select="$elonet_id"/>_Review</xsl:variable>
-    <momaf:hasReview rdf:datatype="rdf:HTML">
+    <momaf:hasReview rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML">
       <xsl:apply-templates select="elokuva_lehdistoarvio"/>
     </momaf:hasReview>
     <momaf:hasText>
       <rdf:Description rdf:about="{$entityname}">
 	<rdf:type rdf:resource="http://momaf-data.utu.fi/Review"/>
-	<momaf:text xml:lang="fi" rdf:datatype="rdf:HTML">
+	<momaf:text xml:lang="fi" rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML">
 	  <xsl:apply-templates select="elokuva_lehdistoarvio"/>
 	</momaf:text>
       </rdf:Description>
@@ -859,13 +876,13 @@ TODO Check if this is really so. -->
   <xsl:template match="ProductionEvent[@elonet-tag='huomautukset']">
     <xsl:param name="elonet_id" tunnel="yes"/>
     <xsl:variable name="entityname">http://momaf-data.utu.fi/<xsl:value-of select="$elonet_id"/>_Commentary</xsl:variable>
-    <momaf:hasCommentary rdf:datatype="rdf:HTML">
+    <momaf:hasCommentary rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML">
       <xsl:apply-templates select="elokuva_huomautukset"/>
     </momaf:hasCommentary>
     <momaf:hasText>
       <rdf:Description rdf:about="{$entityname}">
 	<rdf:type rdf:resource="http://momaf-data.utu.fi/Commentary"/>
-	<momaf:text xml:lang="fi" rdf:datatype="rdf:HTML">
+	<momaf:text xml:lang="fi" rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML">
 	  <xsl:apply-templates select="elokuva_huomautukset"/>
 	</momaf:text>
       </rdf:Description>
@@ -876,14 +893,14 @@ TODO Check if this is really so. -->
   <xsl:template match="ContentDescription[DescriptionType='Synopsis']">
     <xsl:param name="elonet_id" tunnel="yes"/>
     <xsl:variable name="entityname">http://momaf-data.utu.fi/<xsl:value-of select="$elonet_id"/>_Synopsis</xsl:variable>
-    <momaf:hasSynopsis rdf:datatype="rdf:HTML">
+    <momaf:hasSynopsis rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML">
       <xsl:attribute name="xml:lang"><xsl:apply-templates select="Language"/></xsl:attribute>
       <xsl:value-of select="DescriptionText"/>
     </momaf:hasSynopsis>
     <momaf:hasText>
       <rdf:Description rdf:about="{$entityname}">
 	<rdf:type rdf:resource="http://momaf-data.utu.fi/Synopsis"/>
-	<momaf:text xml:lang="fi" rdf:datatype="rdf:HTML">
+	<momaf:text xml:lang="fi" rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML">
 	  <xsl:value-of select="DescriptionText"/>
 	</momaf:text>
       </rdf:Description>
@@ -894,14 +911,14 @@ TODO Check if this is really so. -->
   <xsl:template match="ContentDescription[DescriptionType='Content description']">
     <xsl:param name="elonet_id" tunnel="yes"/>
     <xsl:variable name="entityname">http://momaf-data.utu.fi/<xsl:value-of select="$elonet_id"/>_ContentDescription</xsl:variable>
-    <momaf:hasContentDescription rdf:datatype="rdf:HTML">
+    <momaf:hasContentDescription rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML">
       <xsl:attribute name="xml:lang"><xsl:apply-templates select="Language"/></xsl:attribute>
       <xsl:value-of select="DescriptionText"/>
     </momaf:hasContentDescription>
     <momaf:hasText>
       <rdf:Description rdf:about="{$entityname}">
 	<rdf:type rdf:resource="http://momaf-data.utu.fi/ContentDescription"/>
-	<momaf:text xml:lang="fi" rdf:datatype="rdf:HTML">
+	<momaf:text xml:lang="fi" rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML">
 	  <xsl:value-of select="DescriptionText"/>
 	</momaf:text>
       </rdf:Description>

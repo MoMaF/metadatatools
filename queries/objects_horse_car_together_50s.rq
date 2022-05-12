@@ -1,0 +1,27 @@
+PREFIX fn: <http://www.w3.org/2005/xpath-functions#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX text: <http://jena.apache.org/text#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+base  <http://momaf-data.utu.fi/>
+
+select distinct ?moviename (concat(xsd:string(?min),":",xsd:string(?s)) as ?timecode) ?ff ?lf ?date ?f 
+where {
+  ?f a <Movie> .
+  ?f skos:prefLabel ?moviename .
+  ?f <hasScreening> [ a <Premiere>; <date> ?date ]  
+  filter (xsd:int(xsd:gYear(?date)) >= 1950 && xsd:int(xsd:gYear(?date)) <1960)
+  ?f <hasAnnotation> ?ann1 . ?ann1 <refersTo> <annotation_objectclass_car> .
+  ?ann1 <firstFrame> ?a1ff ; <lastFrame> ?a1lf .
+  ?f <hasAnnotation> ?ann2 . ?ann2 <refersTo> <annotation_objectclass_horse> .
+  ?ann2 <firstFrame> ?a2ff ; <lastFrame> ?a2lf .
+  filter (?a1ff<?a2lf && ?a2ff<?a1lf)
+  bind (if(?a1ff>?a2ff,?a1ff,?a2ff) as ?ff ) .
+  bind (if(?a1lf<?a2lf,?a1lf,?a2lf) as ?lf ) .
+  ?ann1 <annotates>/<framesPerSecond> ?fps .
+  bind ((xsd:decimal(?ff)/?fps) as ?sec) .
+  bind (xsd:integer(floor(?sec/60)) as ?min)
+  bind (?sec-(?min*60) as ?s)
+}
+order by ?moviename ?ff

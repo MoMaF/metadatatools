@@ -2,6 +2,10 @@
 
 Scripts for extracting and handling KAVI's Elonet and MoMaF metadata.
 
+## `faces-to-rdf.py`
+
+Tool for processing face recognition data.
+
 ## `kavi-download`
 
 Downloads all XML files listed inside the script.  Change switch really=0
