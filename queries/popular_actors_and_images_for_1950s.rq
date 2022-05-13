@@ -1,0 +1,48 @@
+# Query to retrieve actors and their images from the 20 movies that
+# had most appearances of the most common actors in the 1950's
+# Remove "limit 10" at end to get full data
+
+prefix momaf: <http://momaf-data.utu.fi/>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+
+select ?pers2 ?imageuri
+where {
+  {
+    select ?pers2 (count (?f2) as ?fs2)
+    where {
+      {
+	select ?f2  
+	where {
+	  {
+	    select ?f2 (count(?person) as ?ps)
+	    where {
+	      ?f2 a momaf:Movie; momaf:hasMember [ a momaf:Actor; momaf:hasAgent ?person] .
+	      {
+		select  ?person (count(distinct ?film) as ?movies)
+		where {
+		  ?film a momaf:Movie ; momaf:hasMember [ a momaf:Actor;  momaf:hasAgent ?person ] .
+		  ?film momaf:hasScreening [ a momaf:Premiere; momaf:date ?prdate ] .
+		  filter (xsd:int(xsd:gYear(?prdate))<1960 && xsd:int(xsd:gYear(?prdate))>1949)
+		} #limit 10
+		group by ?person
+		having (?movies > 2)
+		order by desc (?movies)
+	      }
+	      
+	    } group by ?f2
+	    order by desc(?ps)
+	  }
+	  ?f2 momaf:hasRelatedFile ?file . ?file a momaf:DigitalFilmFile .
+	} limit 20
+      }
+      ?f2 momaf:hasMember [a momaf:Actor; momaf:hasAgent ?pers2 ].
+      
+    } group by ?pers2
+    having ( ?fs2 > 1 )
+    order by desc (?fs2)
+  }
+  ?im a momaf:Image .
+  ?im momaf:hasMember [momaf:hasAgent ?pers2 ] .
+  ?im momaf:sourcefile ?imageuri .
+}
+limit 10 # Remove this to get all data
