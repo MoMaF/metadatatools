@@ -1,0 +1,29 @@
+# Query to retrieve the films that have most appearances by the most
+# common actors in the 1950's
+
+prefix momaf: <http://momaf-data.utu.fi/>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+
+select (?f2 as ?filmuri) (?ps as ?actors) ?file 
+where {
+  {
+    select ?f2 (count(?person) as ?ps)
+    where {
+      ?f2 a momaf:Movie; momaf:hasMember [ a momaf:Actor; momaf:hasAgent ?person] .
+      {
+	select  ?person (count(distinct ?film) as ?movies)
+	where {
+	  ?film a momaf:Movie ; momaf:hasMember [ a momaf:Actor;  momaf:hasAgent ?person ] .
+	  ?film momaf:hasScreening [ a momaf:Premiere; momaf:date ?prdate ] .
+	  filter (xsd:int(xsd:gYear(?prdate))<1960 && xsd:int(xsd:gYear(?prdate))>1949)
+	} #limit 10
+	group by ?person
+	having (?movies > 2)
+	order by desc (?movies)
+      }
+      
+    } group by ?f2
+    order by desc(?ps)
+  }
+  ?f2 momaf:hasRelatedFile ?file . ?file a momaf:DigitalFilmFile .
+} limit 20
