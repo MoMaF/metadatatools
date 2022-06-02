@@ -29,7 +29,6 @@ RESULTGRAPH = "http://momaf-data.utu.fi/face_annotation_data"
 FILM_FILES_GRAPH_NAME = "http://momaf-data.utu.fi/digital_film_files"
 
 dir = '/scratch/project_2002528'
-datadir = dir + "/emil/data/"
 
 # Read username and password from INI file. Simple.
 config = configparser.ConfigParser()
@@ -44,6 +43,10 @@ parser.add_argument('--boxdata', action='store_true',
                     help='output **boxdata** rows instead of RDF')
 parser.add_argument('--upload',action='store_true',help="Upload data directy to Triple Store. Uploading with argument '--all' replaces the face annotation data graph completely; specifying movie id's on the command line merges data for those movies with existing data in the graph.")
 parser.add_argument('--all', action='store_true',help="Process all movies. Overrides any single movie id list present")
+parser.add_argument('--datadir', type=str, default=dir+"/emil/data",
+                    help="Directory where <movieid>-data directories reside, default=%(default)s")
+parser.add_argument('--unlabeled', action='store_true',
+                    help="Do not use labels.csv file but predictions.json and clusters.json instead")
 parser.add_argument('movies', nargs='*',
                     help='movie-ids ...')
 args = parser.parse_args()
@@ -64,7 +67,10 @@ momaf = rdflib.Namespace("http://momaf-data.utu.fi/")
 g.bind("momaf", momaf)
 dfg.bind("momaf", momaf)
 
-labels = pd.read_csv('labels.csv')
+if not args.unlabeled:
+    labels = pd.read_csv('labels.csv')
+else:
+    labels = None
 # actors = pd.read_csv('actors.csv')
 
 ### Get actor names etc. from triple store
@@ -110,21 +116,25 @@ SELECT  ?df WHERE {{
     if args.debug: print (ares[0])
     return URIRef(ares[0])
 
-def make_digital_film_file(movie,filename,fwidth,fheight,fps):
+def make_digital_film_file(movie,filename,swidth,sheight,dwidth,dheight,sar,fps):
     df = momaf["film_file_"+quote(filename)]
     if args.debug: print(filename)
     dfg.add((movie,momaf.hasRelatedFile,df))
     dfg.add((df,RDF.type,momaf.DigitalFilmFile))
-    dfg.add((df,momaf.fileName,rdflib.Literal(filename)))
-    dfg.add((df,momaf.frameWidth,rdflib.Literal(fwidth,datatype=XSD.integer)))
-    dfg.add((df,momaf.frameHeight,rdflib.Literal(fheight,datatype=XSD.integer)))
-    dfg.add((df,momaf.framesPerSecond,rdflib.Literal(fps,datatype=XSD.decimal)))
+    dfg.add((df,momaf.fileName,          rdflib.Literal(filename)))
+    dfg.add((df,momaf.storageWidth,      rdflib.Literal(swidth,datatype=XSD.integer)))
+    dfg.add((df,momaf.storageHeight,     rdflib.Literal(sheight,datatype=XSD.integer)))
+    dfg.add((df,momaf.displayWidth,      rdflib.Literal(dwidth,datatype=XSD.integer)))
+    dfg.add((df,momaf.displayHeight,     rdflib.Literal(dheight,datatype=XSD.integer)))
+    dfg.add((df,momaf.sampleAspectRatio, rdflib.Literal(sar,datatype=XSD.decimal)))
+    dfg.add((df,momaf.framesPerSecond,   rdflib.Literal(fps,datatype=XSD.decimal)))
     if args.debug: print(df)
     return df
 
 if args.all:
     # Get all movie id's from the datadir
-    movies = list(map(lambda a : re.match(r".*/(.*)-data$",str(a)).group(1),sorted(Path(datadir).glob("*-data"))))
+    movies = list(map(lambda a : re.match(r".*/(.*)-data$",str(a)).group(1),
+                      sorted(Path(args.datadir).glob("*-data"))))
 else:
     movies = args.movies
 
@@ -133,12 +143,23 @@ if args.debug: print (list(movies))
 for m in movies:
     movie = momaf["elonet_elokuva_"+str(m)]
 
-    l = labels.loc[labels['movie_id']==int(m)]
-    l = l.loc[l['cluster_status']=='labeled']
-    l = l.loc[l['image_status']=='same']
+    if labels is not None:
+        l = labels.loc[labels['movie_id']==int(m)]
+        l = l.loc[l['cluster_status']=='labeled']
+        l = l.loc[l['image_status']=='same']
+        nlabels = l.shape[0]
+    else:
+        l = None
+        nlabels = 0
 
-    w   = None
-    h   = None
+    if args.debug:
+        print(m, movie, nlabels, 'labeled trajectories found')
+    
+    sw  = None
+    sh  = None
+    dw  = None
+    dh  = None
+    sar = None
     fps = None
 
     jf = dir+'/metadata/'+str(m)+'-*.json'
@@ -150,9 +171,22 @@ for m in movies:
     assert 'streams' in meta
     for s in meta['streams']:
         if s['codec_type']=='video':
-            assert w is None and h is None and fps is None
-            w = int(s['width'])
-            h = int(s['height'])
+            assert sw is None and sh is None and fps is None
+            sw = int(s['width'])
+            sh = int(s['height'])
+            a = s.get('sample_aspect_ratio', None)
+            if a is None:
+                sar = 1
+            else:
+                x = re.match('(\d+):(\d+)', a)
+                if x:
+                    assert int(x.group(1))>0 and int(x.group(2))>0
+                    sar = int(x.group(1))/int(x.group(2))
+                else:
+                    sar = float(a)
+            assert sar>=1
+            dw = int(sar*sw)
+            dh = sh
             f = s['avg_frame_rate']
             x = re.match('(\d+)/(\d+)', f)
             if x:
@@ -160,31 +194,49 @@ for m in movies:
                 fps = int(x.group(1))/int(x.group(2))
             else:
                 fps = float(f)
-    assert w is not None and h is not None and fps is not None
-    assert w>0 and h>0 and fps and fps>0
+    assert sw is not None and sh is not None and fps is not None
+    assert sw>0 and sh>0 and dw>0 and dh>0 and fps and fps>0
 
+    if args.debug:
+        print('sw={} sh={} dw={} dh={} sar={} f={} x={} fps={}'.
+              format(sw, sh, dw, dh, sar, f, x, fps))
+    
     #get filename
     assert 'format' in meta
     fname = meta['format']['filename'].split("/")[-1]
     assert fname is not None
 
     # get digital film file
-    df = make_digital_film_file(movie,fname,w,h,fps)
-    
+    df = make_digital_film_file(movie,fname,sw,sh,dw,dh,sar,fps)
+
+    d = args.datadir+'/'+str(m)+'-data'
+
     tra = {}
-    for _,i in l.iterrows():
-        tra[i['trajectory']] = i['label']
-        if args.debug:
-            print('LABEL', i['trajectory'], i['label'])
+    if l is not None:
+        for _,i in l.iterrows():
+            tra[i['trajectory']] = i['label']
+            if args.debug:
+                print('LABEL', i['trajectory'], i['label'])
+    else:
+        clupred = {}
+        pred = json.load(open(d+'/predictions.json'))
+        pred = pred['predictions']
+        for t, a in pred.items():
+            a = [ (v, k) for k, v in a.items() ]
+            a.sort()
+            clupred[int(t)] = a[-1][1]
+        clus = json.load(open(d+'/clusters.json'))
+        for i, c in enumerate(clus['clusters']):
+            tra[i] = clupred[c] 
         
-    d = datadir+str(m)+'-data'
     trajl = d+'/trajectories.jsonl'
     if args.debug:
         print('TRAJ', trajl)
     with jsonlines.open(trajl) as tr:
         for l in tr:
-            # print(l)
             li = l['index']
+            if args.debug:
+                print(li, l['start'], l['len'], li in tra)
             if li in tra:
                 # Annotation starts here
                 s = l['start']
@@ -225,13 +277,13 @@ for m in movies:
                             quote(fname), str(s),f[0],f[1],f[2],f[3])
                         box = rdflib.URIRef(bboxname)
                         g.add((bboxlist, RDF["_"+str(bcount)], box))
-                        g.add((box, RDF.type,       momaf.BoundingBox))
+                        g.add((box, RDF.type, momaf.BoundingBox))
                         g.add((box, momaf.hasRelatedFile, df))
                         g.add((box, momaf.frameNumber,rdflib.Literal(s,datatype=XSD.integer)))
-                        g.add((box, momaf.minX,     rdflib.Literal(f[0]/w, datatype=XSD.decimal)))
-                        g.add((box, momaf.minY,     rdflib.Literal(f[1]/h, datatype=XSD.decimal)))
-                        g.add((box, momaf.maxX,     rdflib.Literal(f[2]/w, datatype=XSD.decimal)))
-                        g.add((box, momaf.maxY,     rdflib.Literal(f[3]/h, datatype=XSD.decimal)))
+                        g.add((box, momaf.minX, rdflib.Literal(f[0]/dw, datatype=XSD.decimal)))
+                        g.add((box, momaf.minY, rdflib.Literal(f[1]/dh, datatype=XSD.decimal)))
+                        g.add((box, momaf.maxX, rdflib.Literal(f[2]/dw, datatype=XSD.decimal)))
+                        g.add((box, momaf.maxY, rdflib.Literal(f[3]/dh, datatype=XSD.decimal)))
 
                     s += 1
 
